@@ -3,9 +3,10 @@
 function convertToRequest($object)
 {
  $result = '';
- foreach($object as $key => $value) {
-    $result .= $key."=".hash("sha256",$value)."&"; //hashing
-  }
+ foreach($object as $key => $value) 
+ {
+  $result .= $key."=".hash("sha256",$value)."&"; //hashing
+ }
  $result = rtrim($result,"&"); //remove last ampersand;
  return $result;
 }
