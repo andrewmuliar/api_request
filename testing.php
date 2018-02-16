@@ -50,9 +50,11 @@ function HashRequest($data)
    $today = getdate();
    $date = 'Date: '.$today['hours'].':'.$today['wday'].':'.$today['minutes'].' '.$today['month'].' '.$today['wday'];
    $line = '===================================================================';
+   print_r($response);
    $hashdata = json_encode(HashRequest($response->customers));
-   $post = $response->customers;
+   $post = $response->status;
    $post = json_encode($post);
+   echo $post;
    $type = " Data type: ".gettype($post);
    $log = $line.PHP_EOL.$request.PHP_EOL.$type.PHP_EOL.' '.$post.' '.PHP_EOL.$date.PHP_EOL;
    $haslog = $line.PHP_EOL.$request.PHP_EOL.$type.PHP_EOL.' '.$hashdata.' '.PHP_EOL.$date.PHP_EOL;
