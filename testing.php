@@ -1,6 +1,6 @@
 <?php
 header("Access-Control-Allow-Origin: *");
-/*Convert to hash data*/
+/*Read all array of object in any deep*/
 function HashRequest($data)
 {
  $new_data = array();
@@ -12,7 +12,7 @@ function HashRequest($data)
  return $new_data;
 }
 
-//Recursive func for inception all data from array of object
+//Recursive func for inception all data from array of object and hashing
  function redo($arrayka)
  {
   $ar = array();
@@ -62,7 +62,7 @@ function HashRequest($data)
    file_put_contents($hasfile, $haslog, FILE_APPEND);
   }
   else
-  echo 'error';
+   echo 'error';
  }
 
 
