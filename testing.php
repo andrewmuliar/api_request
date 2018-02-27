@@ -89,7 +89,7 @@ function backToString($array)
   $today = getdate();
   $type = " Data type: ".gettype($post);
   $date = 'Date: '.$today['hours'].':'.$today['wday'].':'.$today['minutes'].' '.$today['month'].' '.$today['wday'];
-  $line = '====New transaction======';
+  $line = '==== New transaction ======';
   $hashdata = HashRequest($json);
   $hashdata = backToString($hashdata);
   echo $hashdata;
