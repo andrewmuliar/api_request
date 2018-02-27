@@ -66,20 +66,20 @@ function HashRequest($data)
  }
 
 
- takeBX('Customer');
-  /*  $request = 'Request type: '.$_SERVER['REQUEST_METHOD'];
-   $post = file_get_contents('php://input',true);
-   $json = json_decode($post);
-   $filename = 'super_log_file.txt';
-   $hasfile = 'super_hash_data.txt';
-   $today = getdate();
-   $type = " Data type: ".gettype($post);
-   $date = 'Date: '.$today['hours'].':'.$today['wday'].':'.$today['minutes'].' '.$today['month'].' '.$today['wday'];
-   $line = '====================================================';
-   $hashdata = HashRequest($response->customers);
-   $log = $line.PHP_EOL.$request.PHP_EOL.$type.PHP_EOL.' '.$post.' '.PHP_EOL.$date.PHP_EOL;
-   $haslog = $line.PHP_EOL.$request.PHP_EOL.$type.PHP_EOL.' '.$hashdata.' '.PHP_EOL.$date.PHP_EOL;
-   file_put_contents($filename, $log, FILE_APPEND);
-   file_put_contents($hasfile, $haslog, FILE_APPEND);*/
- echo ' Status = Ok';
+ //takeBX('Customer');
+  $request = 'Request type: '.$_SERVER['REQUEST_METHOD'];
+  $post = file_get_contents('php://input',true);
+  $json = json_decode($post);
+  $filename = 'super_log_file.txt';
+  $hasfile = 'super_hash_data.txt';
+  $today = getdate();
+  $type = " Data type: ".$request;
+  $date = 'Date: '.$today['hours'].':'.$today['wday'].':'.$today['minutes'].' '.$today['month'].' '.$today['wday'];
+  $line = '====================================================';
+  $hashdata = HashRequest($json);
+  $log = $line.PHP_EOL.$type.PHP_EOL.' '.$post.' '.PHP_EOL.$date.PHP_EOL;
+  $haslog = $line.PHP_EOL.$request.PHP_EOL.' '.$hashdata.' '.PHP_EOL.$date.PHP_EOL;
+  file_put_contents($filename, $log, FILE_APPEND);
+  file_put_contents($hasfile, $haslog, FILE_APPEND);*/
+  echo ' Status = Ok';
 ?>
