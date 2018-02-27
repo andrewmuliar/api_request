@@ -7,11 +7,28 @@ function HashRequest($data)
   for ($i = 0; $i < count($data); $i++)
   {
    $new_data[] = redo($data[$i]);
-  }
+  } 
  print_r($new_data);
+ //backToString($new_data);
  return $new_data;
 }
 
+/*function backToString($array)
+{
+ $returnString = '[';
+  foreach($array as $key => $value)
+  {
+   //If key has another level childs, he go recurse himself
+   if(gettype($array->$key) == 'object')
+   {
+	$returnString .= '{'.backToString($array->$key).'}'; //recurse
+   }
+   else // if key simple key no multydimension level
+    $returnString .= '{'.$key.':'.$value.'}';
+  }
+ $returnString .= ']';
+ echo $returnString;
+}*/
 //Recursive func for inception all data from array of object and hashing
  function redo($arrayka)
  {
@@ -73,13 +90,13 @@ function HashRequest($data)
   $filename = 'super_log_file.txt';
   $hasfile = 'super_hash_data.txt';
   $today = getdate();
-  $type = " Data type: ".$request;
+  $type = " Data type: ".gettype($post);
   $date = 'Date: '.$today['hours'].':'.$today['wday'].':'.$today['minutes'].' '.$today['month'].' '.$today['wday'];
   $line = '====================================================';
   $hashdata = HashRequest($json);
-  $log = $line.PHP_EOL.$type.PHP_EOL.' '.$post.' '.PHP_EOL.$date.PHP_EOL;
+  $log = $line.PHP_EOL.$type.PHP_EOL.' '.$request.' '.PHP_EOL.$post.PHP_EOL.$date.PHP_EOL;
   $haslog = $line.PHP_EOL.$request.PHP_EOL.' '.$hashdata.' '.PHP_EOL.$date.PHP_EOL;
   file_put_contents($filename, $log, FILE_APPEND);
-  file_put_contents($hasfile, $haslog, FILE_APPEND);*/
+  file_put_contents($hasfile, $haslog, FILE_APPEND);
   echo ' Status = Ok';
 ?>
