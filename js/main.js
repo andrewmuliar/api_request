@@ -22,12 +22,12 @@
  function input_data()
 {
  object = 
-[
+ [
   { "username": "data_user_name", "option":{'sex':'male', 'home':{'street':'carrol street'}} },
   { "lastname": "LastName", "markerPosition": "3333" },
   { "phone": "4657812", "markerPosition": "-3" }
-]
-object = JSON.stringify(object)
+ ]
+ object = JSON.stringify(object)
   $.ajax({
         type:     "POST",
 		cache:    false,

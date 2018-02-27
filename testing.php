@@ -74,6 +74,8 @@ function backToString($array)
   }
   else
    echo 'error';
+
+  curl_close($ch);
  }
 
 
