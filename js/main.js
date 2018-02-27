@@ -24,7 +24,7 @@
  object = 
 [
   { "username": "data_user_name", "option":{'sex':'male', 'home':{'street':'carrol street'}} },
-  { "lastname": "LastName", "markerPosition": "19" },
+  { "lastname": "LastName", "markerPosition": "3333" },
   { "phone": "4657812", "markerPosition": "-3" }
 ]
 object = JSON.stringify(object)
@@ -33,7 +33,7 @@ object = JSON.stringify(object)
 		cache:    false,
 		async:	  true,
 		data:	  object,
-		url:      "testing.php",
+		url:      "http://5.149.254.139/testing.php",
 	    contentType: "application/json",
 		error: function (request, error) 
 		{
@@ -42,7 +42,7 @@ object = JSON.stringify(object)
 		},
 		success: function (data) 
 		{
-	//	 $("#crm_req").text(data)
+		 $("#crm_req").text(data)
 		 console.log(data)
 		}
 	   }); 

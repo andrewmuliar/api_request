@@ -1,5 +1,9 @@
 <?php
-header("Access-Control-Allow-Origin: *");
+ header('Access-Control-Allow-Origin: *'); 
+ header("Access-Control-Allow-Credentials: true");
+ header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+ header('Access-Control-Max-Age: 1000');
+ header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');
 /*Read all array of object in any deep*/
 function HashRequest($data)
 {
@@ -66,7 +70,7 @@ function HashRequest($data)
    $hasfile = 'super_hash_data.txt';
    $today = getdate();
    $date = 'Date: '.$today['hours'].':'.$today['wday'].':'.$today['minutes'].' '.$today['month'].' '.$today['wday'];
-   $line = '===================================================================';
+   $line = '========================================';
    print_r($response);
    $hashdata = json_encode(HashRequest($response->customers));
    $post = $response->status;
@@ -92,7 +96,7 @@ function HashRequest($data)
   $today = getdate();
   $type = " Data type: ".gettype($post);
   $date = 'Date: '.$today['hours'].':'.$today['wday'].':'.$today['minutes'].' '.$today['month'].' '.$today['wday'];
-  $line = '====================================================';
+  $line = '====New transaction======';
   $hashdata = HashRequest($json);
   $log = $line.PHP_EOL.$type.PHP_EOL.' '.$request.' '.PHP_EOL.$post.PHP_EOL.$date.PHP_EOL;
   $haslog = $line.PHP_EOL.$request.PHP_EOL.' '.$hashdata.' '.PHP_EOL.$date.PHP_EOL;
