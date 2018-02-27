@@ -13,7 +13,6 @@ function HashRequest($data)
    $new_data[] = redo($data[$i]);
   } 
  print_r($new_data);
- //backToString($new_data);
  return $new_data;
 }
 
@@ -37,9 +36,7 @@ function HashRequest($data)
  //transform heshed array to simple string for hash log file
 function backToString($array)
 {
- $out = array_values($array);
- $stringToReturn = json_encode($out);
- return $stringToReturn;
+ return json_encode(array_values($array));
 }
 
 
