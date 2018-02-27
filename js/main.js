@@ -17,7 +17,7 @@
 		 console.log(data)
 		}
 	   }); 
-}
+ }
 
  function input_data()
 {
