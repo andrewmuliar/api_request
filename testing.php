@@ -34,7 +34,7 @@ function HashRequest($data)
   return $ar;
  }
 
- //tranfrom heshed array to simple string for hash log file
+ //transform heshed array to simple string for hash log file
 function backToString($array)
 {
  $out = array_values($array);
@@ -81,7 +81,6 @@ function backToString($array)
 
 
  //takeBX('Customer');
-
  /*creating log files*/
   $request = 'Request type: '.$_SERVER['REQUEST_METHOD'];
   $post = file_get_contents('php://input',true);

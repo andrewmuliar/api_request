@@ -33,7 +33,7 @@ object = JSON.stringify(object)
 		cache:    false,
 		async:	  true,
 		data:	  object,
-		url:      "http://5.149.254.139/testing.php",
+		url:      "testing.php",
 	    contentType: "application/json",
 		error: function (request, error) 
 		{
