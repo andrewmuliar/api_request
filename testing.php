@@ -84,7 +84,7 @@ function backToString($array)
   $filename = 'super_log_file.txt';
   $hasfile = 'super_hash_data.txt';
   $today = getdate();
-  $type = " Data type: ".gettype($post);
+  $type = "Data type: ".gettype($post);
   $date = 'Date: '.$today['hours'].':'.$today['wday'].':'.$today['minutes'].' '.$today['month'].' '.$today['wday'];
   $line = '==== New transaction ======';
   $hashdata = HashRequest($json);
