@@ -1,4 +1,0 @@
-==== New transaction ======
-Request type: GET
- [] 
-Date: 8:3:56 February 3

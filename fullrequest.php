@@ -1,19 +1,9 @@
 <?php
- header('Access-Control-Allow-Origin: *'); 
+/* header('Access-Control-Allow-Origin: *'); 
  header("Access-Control-Allow-Credentials: true");
  header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
  header('Access-Control-Max-Age: 1000');
- header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');
-/*Read all array of object in any deep*/
-function HashRequest($data)
-{
- $new_data = array();
-  for ($i = 0; $i < count($data); $i++)
-  {
-   $new_data[] = redo($data[$i]);
-  } 
- return $new_data;
-}
+ header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');*/
 
 //Recursive func for inception all data from array of object and hashing
  function redo($arrayka)
@@ -31,18 +21,28 @@ function HashRequest($data)
   }
   return $ar;
  }
+function HashRequest($data)
+{
+ $new_data = array();
+  for ($i = 0; $i < count($data); $i++)
+  {
+   $new_data[] = redo($data[$i]);
+  } 
+ return $new_data;
+}
 
- //transform heshed array to simple string for hash log file
 function backToString($array)
 {
  return json_encode(array_values($array));
 }
 
-
- /*creating API request to BX8, hashing and put in logs files*/
- function takeBX($module)
+ /*creating API request to get data from BX8, hashing and put in logs files*/
+ function takeData()
  {
-  $url = 'http://affiliates.bx8.me/?MODULE='.$module.'&COMMAND=View&api_username=RND@leomarkets.com&api_password=2Aj484$!2A';
+  $module = 'Lead';
+  $api_username = 'RND@leomarkets.com';
+  $api_password = '2Aj484$!2A';
+  $url = 'http://affiliates.bx8.me/?MODULE='.$module.'&COMMAND=View&api_username='.$api_username.'&api_password='.$api_password;
   $ch = curl_init($url);
   curl_setopt($ch,CURLOPT_RETURNTRANSFER,true); //LEADS
   curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,20);
@@ -52,22 +52,21 @@ function backToString($array)
   curl_setopt($ch,CURLOPT_HEADER, false);
   $exec = curl_exec($ch);
   $response = json_decode($exec);
+  print_r($response);
   if($response->status == 'OK')
   {
-   $request = 'Request type: '.$_SERVER['REQUEST_METHOD'];
    $filename = 'super_log_file.txt';
-   $hasfile = 'super_hash_data.txt';
+   $hashfile = 'super_hash_data.txt';
    $today = getdate();
    $date = 'Date: '.$today['hours'].':'.$today['wday'].':'.$today['minutes'].' '.$today['month'].' '.$today['wday'];
    $line = '========================================';
-   $hashdata = json_encode(HashRequest($response->customers));
-   $post = $response->status;
-   $post = json_encode($post);
-   $type = " Data type: ".gettype($post);
-   $log = $line.PHP_EOL.$request.PHP_EOL.$type.PHP_EOL.' '.$post.' '.PHP_EOL.$date.PHP_EOL;
-   $haslog = $line.PHP_EOL.$request.PHP_EOL.$type.PHP_EOL.' '.$hashdata.' '.PHP_EOL.$date.PHP_EOL;
+   $countArray = count($response->leads);
+   $dataString = backToString($response->leads);
+   $hashdata = backToString(HashRequest($response->leads));
+   $log = $line.PHP_EOL.' Response Status: '.$response->status.PHP_EOL.' Records count: '.$countArray.PHP_EOL.$date.PHP_EOL.$dataString.$line;
+   $hashlog = $line.PHP_EOL.' Response Status: '.$response->status.PHP_EOL.' Records count: '.$countArray.PHP_EOL.$date.PHP_EOL.$hashdata.$line;
    file_put_contents($filename, $log, FILE_APPEND);
-   file_put_contents($hasfile, $haslog, FILE_APPEND);
+   file_put_contents($hashfile, $hashlog, FILE_APPEND);
   }
   else
    echo 'error';
@@ -75,10 +74,9 @@ function backToString($array)
   curl_close($ch);
  }
 
-
- //takeBX('LEADS'); //Customer
+ takeData();
  /*creating log files*/
-  $request = 'Request type: '.$_SERVER['REQUEST_METHOD'];
+ /* $request = 'Request type: '.$_SERVER['REQUEST_METHOD'];
   $post = file_get_contents('php://input',true);
   $json = json_decode($post);
   $filename = 'super_log_file.txt';
@@ -94,5 +92,5 @@ function backToString($array)
   $haslog = $line.PHP_EOL.$request.PHP_EOL.' '.$hashdata.' '.PHP_EOL.$date.PHP_EOL;
   file_put_contents($filename, $log, FILE_APPEND);
   file_put_contents($hasfile, $haslog, FILE_APPEND);
-  echo ' Status = Ok';
+  echo ' Status = Ok';*/
 ?>

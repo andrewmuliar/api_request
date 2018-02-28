@@ -1,5 +1,5 @@
 <?php
-//Converting object from IN request to string for bx8 request AND HASHING
+//Converting object from IN request to string for bx8 request
 function convertToRequest($object)
 {
  $result = '';
