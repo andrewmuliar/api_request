@@ -44,7 +44,7 @@ function backToString($array)
  function takeData()
  {
 // Request options
-  $module = 'Lead';
+  $module = 'Customer';
   $api_username = 'RND@leomarkets.com';
   $api_password = '2Aj484$!2A';
   $recordsToShow = 0; //MAX 500 records
@@ -65,7 +65,7 @@ function backToString($array)
   curl_setopt($ch,CURLOPT_HEADER, false);
   $exec = curl_exec($ch);
   $response = json_decode($exec);
-  echo 'Count of records: '. $countArray = count($response->leads); //Count of records
+  echo 'Count of records: '. $countArray = count($response->customers); //Count of records
   echo '<pre>' . var_export($response, true) . '</pre>';
   if($response->status == 'OK') //Ok
   {
@@ -74,9 +74,9 @@ function backToString($array)
    $today = getdate();
    $date = 'Date: '.$today['hours'].':'.$today['wday'].':'.$today['minutes'].' '.$today['month'].' '.$today['wday'];
    $line = '========================================';
-   $countArray = count($response->leads); //Count of records
-   $dataString = backToString($response->leads); //Response to string
-   $hashdata = backToString(HashRequest($response->leads)); //hash response and make from array to string
+   $countArray = count($response->customers); //Count of records
+   $dataString = backToString($response->customers); //Response to string
+   $hashdata = backToString(HashRequest($response->customers)); //hash response and make from array to string
    //Ready text for log file
    $log = $line.PHP_EOL.' Response Status: '.$response->status.PHP_EOL.' Records count: '.$countArray.PHP_EOL.$date.PHP_EOL.$dataString.PHP_EOL.$line;
    //Ready text for hash log file
