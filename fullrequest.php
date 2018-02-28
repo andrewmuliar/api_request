@@ -21,16 +21,19 @@
   }
   return $ar;
  }
+
+ /*Start read array for hashing*/
 function HashRequest($data)
 {
  $new_data = array();
   for ($i = 0; $i < count($data); $i++)
   {
-   $new_data[] = redo($data[$i]);
+   $new_data[] = redo($data[$i]); // User recurse for every value -> key
   } 
  return $new_data;
 }
 
+//Transform array to string
 function backToString($array)
 {
  return json_encode(array_values($array));
@@ -42,7 +45,11 @@ function backToString($array)
   $module = 'Lead';
   $api_username = 'RND@leomarkets.com';
   $api_password = '2Aj484$!2A';
-  $url = 'http://affiliates.bx8.me/?MODULE='.$module.'&COMMAND=View&api_username='.$api_username.'&api_password='.$api_password;
+  $recordsToShow = 15; //MAX 500 records
+  $recordStart = 0; //PAGES by 500 records START FROM 0
+  $url = 'http://affiliates.bx8.me/?MODULE='.$module.'&COMMAND=View&LIMIT[recordsToShow]='.$recordsToShow.'&LIMIT[recordStart]='.$recordStart.'&api_username='.$api_username.'&api_password='.$api_password;
+  //MODULE=Customer&COMMAND=view&LIMIT[recordsToShow]=5&LIMIT[recordStart]=0
+
   $ch = curl_init($url);
   curl_setopt($ch,CURLOPT_RETURNTRANSFER,true); //LEADS
   curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,20);
@@ -63,8 +70,8 @@ function backToString($array)
    $countArray = count($response->leads);
    $dataString = backToString($response->leads);
    $hashdata = backToString(HashRequest($response->leads));
-   $log = $line.PHP_EOL.' Response Status: '.$response->status.PHP_EOL.' Records count: '.$countArray.PHP_EOL.$date.PHP_EOL.$dataString.$line;
-   $hashlog = $line.PHP_EOL.' Response Status: '.$response->status.PHP_EOL.' Records count: '.$countArray.PHP_EOL.$date.PHP_EOL.$hashdata.$line;
+   $log = $line.PHP_EOL.' Response Status: '.$response->status.PHP_EOL.' Records count: '.$countArray.PHP_EOL.$date.PHP_EOL.$dataString.PHP_EOL.$line;
+   $hashlog = $line.PHP_EOL.' Response Status: '.$response->status.PHP_EOL.' Records count: '.$countArray.PHP_EOL.$date.PHP_EOL.$hashdata.PHP_EOL.$line;
    file_put_contents($filename, $log, FILE_APPEND);
    file_put_contents($hashfile, $hashlog, FILE_APPEND);
   }

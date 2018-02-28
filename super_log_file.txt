@@ -1,0 +1,16 @@
+========================================
+ Response Status: OK
+ Records count: 1
+Date: 14:3:27 February 3
+[{"id":"45fe63f5-89e2-46f3-8251-a88c0084745a","firstName":"Lead","lastName":"Test","email":"fmatest_3WoO@testing.com","phone":"390670494076","country":380,"a_aid":"A_aid","a_bid":null,"a_cid":null,"verification":null,"gender":null,"cellphone":null,"fax":null,"registrationCountry":null,"state":null,"city":null,"street":null,"houseNumber":null,"postCode":null,"campaignId":"c520f567-4c88-4c3c-a849-a88500dd72e2","employeeInChargeId":null,"subCampaign":null,"birthday":null,"referLink":null,"personalId":null,"aptNumber":null,"approvesEmailAds":null,"lastTimeActive":null,"saleStatus":null,"leadStatus":null}]
+================================================================================
+ Response Status: OK
+ Records count: 1
+Date: 14:3:28 February 3
+[{"id":"45fe63f5-89e2-46f3-8251-a88c0084745a","firstName":"Lead","lastName":"Test","email":"fmatest_3WoO@testing.com","phone":"390670494076","country":380,"a_aid":"A_aid","a_bid":null,"a_cid":null,"verification":null,"gender":null,"cellphone":null,"fax":null,"registrationCountry":null,"state":null,"city":null,"street":null,"houseNumber":null,"postCode":null,"campaignId":"c520f567-4c88-4c3c-a849-a88500dd72e2","employeeInChargeId":null,"subCampaign":null,"birthday":null,"referLink":null,"personalId":null,"aptNumber":null,"approvesEmailAds":null,"lastTimeActive":null,"saleStatus":null,"leadStatus":null}]
+================================================================================
+ Response Status: OK
+ Records count: 1
+Date: 14:3:28 February 3
+[{"id":"45fe63f5-89e2-46f3-8251-a88c0084745a","firstName":"Lead","lastName":"Test","email":"fmatest_3WoO@testing.com","phone":"390670494076","country":380,"a_aid":"A_aid","a_bid":null,"a_cid":null,"verification":null,"gender":null,"cellphone":null,"fax":null,"registrationCountry":null,"state":null,"city":null,"street":null,"houseNumber":null,"postCode":null,"campaignId":"c520f567-4c88-4c3c-a849-a88500dd72e2","employeeInChargeId":null,"subCampaign":null,"birthday":null,"referLink":null,"personalId":null,"aptNumber":null,"approvesEmailAds":null,"lastTimeActive":null,"saleStatus":null,"leadStatus":null}]
+========================================
