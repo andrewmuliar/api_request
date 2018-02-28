@@ -47,12 +47,12 @@ function backToString($array)
   $module = 'Lead';
   $api_username = 'RND@leomarkets.com';
   $api_password = '2Aj484$!2A';
-  $recordsToShow = 15; //MAX 500 records
+  $recordsToShow = 0; //MAX 500 records
   $recordStart = 0; //PAGES by 500 records START FROM 0
   $url = 'http://affiliates.bx8.me/?MODULE='.$module;
   $url .= '&COMMAND=View';
-  $url .= '&LIMIT[recordsToShow]='.$recordsToShow;
-  $url .= '&LIMIT[recordStart]='.$recordStart;
+ // $url .= '&LIMIT[recordsToShow]='.$recordsToShow;
+  //$url .= '&LIMIT[recordStart]='.$recordStart;
   $url .= '&api_username='.$api_username;
   $url .= '&api_password='.$api_password;
 //Init curl
@@ -65,7 +65,8 @@ function backToString($array)
   curl_setopt($ch,CURLOPT_HEADER, false);
   $exec = curl_exec($ch);
   $response = json_decode($exec);
-  print_r($response);
+  echo 'Count of records: '. $countArray = count($response->leads); //Count of records
+  echo '<pre>' . var_export($response, true) . '</pre>';
   if($response->status == 'OK') //Ok
   {
    $filename = 'super_log_file.txt';
