@@ -1,4 +1,5 @@
 <?php
+//Headers for open CORS 
 /* header('Access-Control-Allow-Origin: *'); 
  header("Access-Control-Allow-Credentials: true");
  header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
@@ -72,11 +73,14 @@ function backToString($array)
    $today = getdate();
    $date = 'Date: '.$today['hours'].':'.$today['wday'].':'.$today['minutes'].' '.$today['month'].' '.$today['wday'];
    $line = '========================================';
-   $countArray = count($response->leads);
-   $dataString = backToString($response->leads);
-   $hashdata = backToString(HashRequest($response->leads));
+   $countArray = count($response->leads); //Count of records
+   $dataString = backToString($response->leads); //Response to string
+   $hashdata = backToString(HashRequest($response->leads)); //hash response and make from array to string
+   //Ready text for log file
    $log = $line.PHP_EOL.' Response Status: '.$response->status.PHP_EOL.' Records count: '.$countArray.PHP_EOL.$date.PHP_EOL.$dataString.PHP_EOL.$line;
+   //Ready text for hash log file
    $hashlog = $line.PHP_EOL.' Response Status: '.$response->status.PHP_EOL.' Records count: '.$countArray.PHP_EOL.$date.PHP_EOL.$hashdata.PHP_EOL.$line;
+   //Recording to log files
    file_put_contents($filename, $log, FILE_APPEND);
    file_put_contents($hashfile, $hashlog, FILE_APPEND);
   }
