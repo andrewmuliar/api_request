@@ -6,32 +6,53 @@
  header('Access-Control-Max-Age: 1000');
  header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');*/
 
-//Recursive func for inception all data from array of object and hashing
- function redo($arrayka)
- {
-  $ar = array();
-  foreach($arrayka as $key => $value)
-  {
-   //If key has another level childs, he go recurse himself
-   if(gettype($arrayka->$key) == 'object')
-   {
-	$ar[$key] = redo($arrayka->$key); //recurse
-   }
-   else // if key simple key no multydimension level
-     $ar[$key] = hash('sha256',$value);
-  }
-  return $ar;
- }
-
  /*Start read array for hashing*/
-function HashRequest($data)
+function HashRequest($data) //return array
 {
  $new_data = array();
-  for ($i = 0; $i < count($data); $i++)
+ $mini_array = array();
+ $currency = '';
+ $timestamp;
+ //Array of keys what we need to take
+ $key_list = array('email',
+				   'phone',
+				   'gender',
+				   'birthday',
+				   'lastName',
+				   'firstName',
+				   'city',
+				   'state',
+				   'postCode',
+				   'country',
+				   'regTime',
+				   'currency');
+foreach($data as $mini_data)
+{
+ foreach($mini_data as $key => $value)
+ {
+  if(in_array($key, $key_list)) //If our key match with needed keys 
   {
-   $new_data[] = redo($data[$i]); // User recurse for every value -> key
-  } 
- return $new_data;
+   if($key == 'currency') //We need pure currency not hashed and make uppercase
+    {
+     $currency = strtoupper($value);
+	}
+   else if($key == 'regTime') // We need timestamp 
+	{
+	 $date = date_create($value);
+	 $timestamp = date_timestamp_get($date);
+	}
+   else
+   	 $mini_array[$key] = hash('sha256',$value);  //hashing value
+  }
+ }
+ //Creating format for FB upload
+ $new_data[]['match_keys'] = $mini_array;
+ $last = count($new_data)-1; //getting creating items list of array
+ $new_data[$last]['currency']   = $currency; //adding keys to this item
+ $new_data[$last]['event_name'] = 'AddPaymentInfo';
+ $new_data[$last]['event_time'] = $timestamp;
+}
+ return $new_data; //array
 }
 
 //Transform array to string
@@ -43,6 +64,7 @@ function backToString($array)
  /*creating API request to get data from BX8, hashing and put in logs files*/
  function takeData()
  {
+  echo 'Making request for data....<br/>';
 // Request options
   $module = 'Customer';
   $api_username = 'RND@leomarkets.com';
@@ -65,10 +87,10 @@ function backToString($array)
   curl_setopt($ch,CURLOPT_HEADER, false);
   $exec = curl_exec($ch);
   $response = json_decode($exec);
-  echo 'Count of records: '. $countArray = count($response->customers); //Count of records
-  echo '<pre>' . var_export($response, true) . '</pre>';
   if($response->status == 'OK') //Ok
   {
+   echo 'Request succeed: '.$response->status.'<br/>';
+   echo 'Count of records: '. $countArray = count($response->customers).'<br/>'; //Count of records
    $filename = 'super_log_file.txt';
    $hashfile = 'super_hash_data.txt';
    $today = getdate();
@@ -76,17 +98,22 @@ function backToString($array)
    $line = '========================================';
    $countArray = count($response->customers); //Count of records
    $dataString = backToString($response->customers); //Response to string
+   $dataArray = HashRequest($response->customers);
+   echo '<pre>' . var_export($dataArray, true) . '</pre>';
    $hashdata = backToString(HashRequest($response->customers)); //hash response and make from array to string
+   echo '<pre>' . var_export($hashdata, true) . '</pre>';
    //Ready text for log file
    $log = $line.PHP_EOL.' Response Status: '.$response->status.PHP_EOL.' Records count: '.$countArray.PHP_EOL.$date.PHP_EOL.$dataString.PHP_EOL.$line;
    //Ready text for hash log file
    $hashlog = $line.PHP_EOL.' Response Status: '.$response->status.PHP_EOL.' Records count: '.$countArray.PHP_EOL.$date.PHP_EOL.$hashdata.PHP_EOL.$line;
    //Recording to log files
+   //echo 'Recording log files<br/>';
    file_put_contents($filename, $log, FILE_APPEND);
    file_put_contents($hashfile, $hashlog, FILE_APPEND);
+   //echo 'File recorded'.PHP_EOL;
   }
   else
-   echo 'Error = '.$response->status;
+   echo 'Error when making request: '.$response->status;
 
   curl_close($ch); //close connection 
  }
