@@ -49,7 +49,6 @@ function backToString($array)
   $recordStart = 0; //PAGES by 500 records START FROM 0
   $url = 'http://affiliates.bx8.me/?MODULE='.$module.'&COMMAND=View&LIMIT[recordsToShow]='.$recordsToShow.'&LIMIT[recordStart]='.$recordStart.'&api_username='.$api_username.'&api_password='.$api_password;
   //MODULE=Customer&COMMAND=view&LIMIT[recordsToShow]=5&LIMIT[recordStart]=0
-
   $ch = curl_init($url);
   curl_setopt($ch,CURLOPT_RETURNTRANSFER,true); //LEADS
   curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,20);
