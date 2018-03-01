@@ -102,21 +102,49 @@ function backToString($array)
 {
  return json_encode(array_values($array));
 }
+//Getting date from last array item
+function getLastDate($array)
+{
+ $count = count($array);
+ return date('Y_m_d',$array[$count-1]['event_time']);
+}
 
+//Record last timestamp to file for next time filtering
+function recordDate($date)
+{
+ $file = fopen("time_records.txt", "w");
+ fwrite($file, $date); //reWriteing date ti file
+ fclose($file);
+}
+
+function read_from_file()
+{
+ $file = fopen("time_records.txt", "r");
+ $date_from_file = fgets($file);
+ fclose($file);
+ return $date_from_file;
+}
  /*creating API request to get data from BX8, hashing and put in logs files*/
  function takeData()
  {
+  echo 'Last date from file: '.read_from_file().'<br/>';
   echo 'Making request for data....<br/>';
 // Request options
   $module = 'Customer';
   $api_username = 'RND@leomarkets.com';
   $api_password = '2Aj484$!2A';
-  $recordsToShow = 0; //MAX 500 records
+  $recordsToShow = read_from_file(); //MAX 500 records
   $recordStart = 0; //PAGES by 500 records START FROM 0
   $url = 'http://affiliates.bx8.me/?MODULE='.$module;
   $url .= '&COMMAND=View';
- // $url .= '&LIMIT[recordsToShow]='.$recordsToShow;
+  //$url .= '&LIMIT[recordsToShow]='.$recordsToShow;
   //$url .= '&LIMIT[recordStart]='.$recordStart;
+
+  /*First Time next line must be commented
+    Because file is empty and filter is equal zero
+	Next times reComment it for read from file last time requests
+  */
+  $url .= '&FILTER[regTime][min]='.read_from_file();
   $url .= '&api_username='.$api_username;
   $url .= '&api_password='.$api_password;
 //Init curl
@@ -143,7 +171,9 @@ function backToString($array)
    $dataArray = HashRequest($response->customers);
    echo '<pre>' . var_export($dataArray, true) . '</pre>';
    $hashdata = backToString(HashRequest($response->customers)); //hash response and make from array to string
-   echo '<pre>' . var_export($hashdata, true) . '</pre>';
+   echo '<pre>'. var_export($hashdata, true) . '</pre>';
+   //record time to file;
+   recordDate(getLastDate($dataArray));
    //Ready text for log file
    $log = $line.PHP_EOL.' Response Status: '.$response->status.PHP_EOL.' Records count: '.$countArray.PHP_EOL.$date.PHP_EOL.$dataString.PHP_EOL.$line;
    //Ready text for hash log file
