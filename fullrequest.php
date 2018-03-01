@@ -13,6 +13,7 @@ function HashRequest($data) //return array
  $mini_array = array();
  $currency = '';
  $timestamp;
+ $value_balance;
  //Array of keys what we need to take
  $key_list = array('email',
 				   'phone',
@@ -23,6 +24,7 @@ function HashRequest($data) //return array
 				   'city',
 				   'state',
 				   'postCode',
+				   'accountBalance',
 				   'country',
 				   'regTime',
 				   'currency');
@@ -41,40 +43,44 @@ foreach($data as $mini_data)
 	 $date = date_create($value);
 	 $timestamp = date_timestamp_get($date);
 	}
+   else if($key == 'accountBalance')
+   {
+    $value_balance = $value
+   }
    else
    {
     switch ($key) //Change keys name for FB
 	{
 	 case 'gender':
-	  $mini_array['gen'] = hash('sha256', $value)
+	  $mini_array['gen'] = hash('sha256', $value);
 	 break;
 
 	 case 'lastName':
-	  $mini_array['ln'] = hash('sha256', $value)
+	  $mini_array['ln'] = hash('sha256', $value);
 	 break;
 
 	 case 'firstName':
-	  $mini_array['fn'] = hash('sha256', $value)
+	  $mini_array['fn'] = hash('sha256', $value);
 	 break;
 
 	 case 'city':
-	  $mini_array['ct'] = hash('sha256', $value)
+	  $mini_array['ct'] = hash('sha256', $value);
 	 break;
 
 	 case 'state':
-	  $mini_array['st'] = hash('sha256', $value)
+	  $mini_array['st'] = hash('sha256', $value);
 	 break;
 
 	 case 'postCode':
-	  $mini_array['zip'] = hash('sha256', $value)
+	  $mini_array['zip'] = hash('sha256', $value);
 	 break;
 
 	 case 'country':
-	  $mini_array['country'] = hash('sha256', $value)
+	  $mini_array['country'] = hash('sha256', $value);
 	 break;
 
 	 case 'country':
-	  $mini_array['country'] = hash('sha256', $value)
+	  $mini_array['country'] = hash('sha256', $value);
 	 break;
 	}
    }
@@ -83,6 +89,7 @@ foreach($data as $mini_data)
  //Creating format for FB upload
  $new_data[]['match_keys'] = $mini_array;
  $last = count($new_data)-1; //getting creating items list of array
+ $new_data[$last]['value']      = $value_balance;
  $new_data[$last]['currency']   = $currency; //adding keys to this item
  $new_data[$last]['event_name'] = 'AddPaymentInfo';
  $new_data[$last]['event_time'] = $timestamp;
