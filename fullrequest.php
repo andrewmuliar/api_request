@@ -45,7 +45,7 @@ foreach($data as $mini_data)
 	}
    else if($key == 'accountBalance')
    {
-    $value_balance = $value
+    $value_balance = $value;
    }
    else
    {
