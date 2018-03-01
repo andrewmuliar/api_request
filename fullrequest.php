@@ -16,7 +16,7 @@ function HashRequest($data) //return array
  $value_balance;
  //Array of keys what we need to take
  $key_list = array('email',
-				   'phone',
+				   'phone',	
 				   'gender',
 				   //'birthday', -- format??
 				   'lastName',
@@ -172,7 +172,7 @@ function read_from_file()
    echo '<pre>' . var_export($dataArray, true) . '</pre>';
    $hashdata = backToString(HashRequest($response->customers)); //hash response and make from array to string
    echo '<pre>'. var_export($hashdata, true) . '</pre>';
-   //record time to file;
+   //record time to file
    recordDate(getLastDate($dataArray));
    //Ready text for log file
    $log = $line.PHP_EOL.' Response Status: '.$response->status.PHP_EOL.' Records count: '.$countArray.PHP_EOL.$date.PHP_EOL.$dataString.PHP_EOL.$line;
