@@ -17,7 +17,7 @@ function HashRequest($data) //return array
  $key_list = array('email',
 				   'phone',
 				   'gender',
-				   'birthday',
+				   //'birthday', -- format??
 				   'lastName',
 				   'firstName',
 				   'city',
@@ -42,7 +42,42 @@ foreach($data as $mini_data)
 	 $timestamp = date_timestamp_get($date);
 	}
    else
-   	 $mini_array[$key] = hash('sha256',$value);  //hashing value
+   {
+    switch ($key) //Change keys name for FB
+	{
+	 case 'gender':
+	  $mini_array['gen'] = hash('sha256', $value)
+	 break;
+
+	 case 'lastName':
+	  $mini_array['ln'] = hash('sha256', $value)
+	 break;
+
+	 case 'firstName':
+	  $mini_array['fn'] = hash('sha256', $value)
+	 break;
+
+	 case 'city':
+	  $mini_array['ct'] = hash('sha256', $value)
+	 break;
+
+	 case 'state':
+	  $mini_array['st'] = hash('sha256', $value)
+	 break;
+
+	 case 'postCode':
+	  $mini_array['zip'] = hash('sha256', $value)
+	 break;
+
+	 case 'country':
+	  $mini_array['country'] = hash('sha256', $value)
+	 break;
+
+	 case 'country':
+	  $mini_array['country'] = hash('sha256', $value)
+	 break;
+	}
+   }
   }
  }
  //Creating format for FB upload
