@@ -154,18 +154,48 @@ function backToString($array)
    file_put_contents($hashfile, $hashlog, FILE_APPEND);
    //echo 'File recorded'.PHP_EOL;
 
-   //this data we should send to FB
+  //this data we should send to FB ---- $hashdata
+ // FaceBook Api connect
+ //Creating link for cUrl fb
+ $facebook_link = 'https://graph.facebook.com/v2.12/1971209353202465/events?';
+ $facebook_link .= 'access_token='.
+ $facebook_link .= 'EAACEdEose0cBABO5f5ZAOy3okp0B67b9IWt2lQkp3x2J8jsk3GQtTgblpQFXMYtqfgI5g4xE6IK0WcPQ0bVSZBdB8xandiPb2fJrcj9ZCHNg8UsSd98l5DfZCvxlhgnYfPcK12sRTI0mjX43WFRTC8cG3IaPT1iyQaHyZAd3ajanf62mJcZAK8ZBFXhymwu0UoZD';
+ $facebook_link .= '&data=';
+ $facebook_link .= $hashdata;
+ 
+ echo 'Making facebook request...<br/>';
+ //making cUrl
+ $curlForFacebook = curl_init();
+curl_setopt_array($curlForFacebook, array(
+  CURLOPT_URL => $facebook_link,
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => "",
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 30,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => "POST",
+  CURLOPT_HTTPHEADER => array(
+    "Cache-Control: no-cache"
+  ))
+ );
 
-   // FaceBook Api connect
-   
+ $facebook_response = curl_exec($curlForFacebook);
+ $err = curl_error($curlForFacebook);
+
+ curl_close($curlForFacebook);
+
+ if ($err) {
+   echo "cURL Error #:" . $err;
+ } else {
+   echo $facebook_response;
+ }  
    
    // Status request
-  }
-  else
-   echo 'Error when making request: '.$response->status;
-
+}
+ else
+  echo 'Error when making request: '.$response->status;
   curl_close($ch); //close connection 
- }
+}
 
 //Init all functions to get Bx8 data, log files, API facebook integration
  takeData();
