@@ -111,6 +111,13 @@ function backToString($array)
    file_put_contents($filename, $log, FILE_APPEND);
    file_put_contents($hashfile, $hashlog, FILE_APPEND);
    //echo 'File recorded'.PHP_EOL;
+
+   //this data we should send to FB
+
+   // FaceBook Api connect
+   
+   
+   // Status request
   }
   else
    echo 'Error when making request: '.$response->status;
