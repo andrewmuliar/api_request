@@ -139,12 +139,10 @@ function read_from_file()
   $url = 'http://affiliates.bx8.me/?MODULE='.$module; //module type
   $url .= '&COMMAND=View'; //action type = VIEW
   //$url .= '&LIMIT[recordStart]='.$recordStart; //Can start items from this point
-
-  /*First Time next line must be commented
-    Because file is empty and filter is equal zero
-	Next times reComment it for read from file last time requests
-  */
-  $url .= '&FILTER[regTime][min]='.$lastTimeReg; //FILTER FOR NEW DATA
+  if($lastTimeReg != '') //If file NOT empty add to request FILTER
+  {
+   $url .= '&FILTER[regTime][min]='.$lastTimeReg; //FILTER FOR NEW DATA 
+  }
   $url .= '&api_username='.$api_username;
   $url .= '&api_password='.$api_password;
 //Init curl
