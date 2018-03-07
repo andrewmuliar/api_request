@@ -178,10 +178,10 @@ function read_from_file()
   //this data we should send to FB ---- $hashdata
  // FaceBook Api connect
  //Creating link for cUrl fb
- $TOKEN = 'EAACbBwoW44YBAGsHjshdvt55TCsrk11jHvi2ULqFjsfBQ4JalrIW0UhdpBLvfCTzQnMgvSdsMOt9jRgjSSDkoZCMhWOZBNx6yTJGTr5pZBhzOvUEVMofKDDoPnCJGf841kGvHELO0RYGYFta6ctFFWp2CdmfNV1fOxmHpj8iNXPzDlVoZB5Y72qPik7wV5vZAmXQmE7ZC1KAZDZD';
- $ID_BUSSINESS   = '1971209353202465';
+ $TOKEN = 'EAACbBwoW44YBAFZBSaF4mzB3tLsAZBtJXGZAcDFZAZBcCZBonaOJiaB8nOfKppE17OuQCkWZCuzGwm8N3n0TykJ3MljKh5yZCZB4H5P8stjh4HZB7BYJ4zd8iLanxAmjI7frqGt9Fg9uWW6UKME8Ph1LdAzEZBoIXJv4dX151JhmaL1j8SFHVJMzLkFit3ihFnqMnw9ZCq29KTTARAZDZD';
+ $OFFLINE_CONV_ID   = '1971209353202465'; //parameter for this FB CONVERSION
  $facebook_link  = 'https://graph.facebook.com/v2.12/';
- $facebook_link .= $ID_BUSSINESS;
+ $facebook_link .= $OFFLINE_CONV_ID;
  $facebook_link .= '/events';
  $facebook_link .= '?access_token=';
  $facebook_link .= $TOKEN;
