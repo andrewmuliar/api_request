@@ -127,7 +127,7 @@ function read_from_file()
   echo 'Last date from file: '.$lastTimeReg.'<br/>';
   echo 'Making request for data....<br/>';
 // Request options
-  $module = 'Customer';
+  $module = 'Customer'; //Getting 'Customers' data
   $api_username = 'RND@leomarkets.com'; //username
   $api_password = '2Aj484$!2A'; // pass
   //MAX 500 records
