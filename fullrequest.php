@@ -122,7 +122,7 @@ function read_from_file()
 }
  /*creating API request to get data from BX8, hashing and put in logs files*/
  function takeData()
- {
+ { 
   $lastTimeReg = read_from_file();
   echo 'Last date from file: '.$lastTimeReg.'<br/>';
   echo 'Making request for data....<br/>';
