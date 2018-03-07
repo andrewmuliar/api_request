@@ -207,10 +207,13 @@ function read_from_file()
  curl_close($curlForFacebook);
 
  //If error founded
- if ($err) {
-   echo "cURL Error #:" . $err;
- } else {
-   echo $facebook_response;
+ if ($err) 
+ {
+  echo "cURL Error #:" . $err;
+ } 
+ else 
+ {
+  echo $facebook_response; //response cURL FB API
  }  
    
 // Status request
