@@ -91,8 +91,8 @@ foreach($data as $mini_data)
  $last = count($new_data)-1; //getting creating items list of array
  $new_data[$last]['value']      = $value_balance;
  $new_data[$last]['currency']   = $currency; //adding keys to this item
- $new_data[$last]['event_name'] = 'AddPaymentInfo';
- $new_data[$last]['event_time'] = $timestamp;
+ $new_data[$last]['event_name'] = 'AddPaymentInfo'; //Type of transaction
+ $new_data[$last]['event_time'] = $timestamp; //Adding time of transaction
 }
  return $new_data; //array
 }
@@ -116,7 +116,7 @@ function recordDate($date)
  fwrite($file, $date); //reWriteing date ti file
  fclose($file);
 }
-
+//Reading last regrTime from file
 function read_from_file()
 {
  $file = fopen("time_records.txt", "r");
@@ -133,7 +133,7 @@ function read_from_file()
   $module = 'Customer';
   $api_username = 'RND@leomarkets.com';
   $api_password = '2Aj484$!2A';
-  $recordsToShow = read_from_file(); //MAX 500 records
+  $lastTimeReg = read_from_file(); //MAX 500 records
   $recordStart = 0; //PAGES by 500 records START FROM 0
   $url = 'http://affiliates.bx8.me/?MODULE='.$module;
   $url .= '&COMMAND=View';
@@ -144,7 +144,7 @@ function read_from_file()
     Because file is empty and filter is equal zero
 	Next times reComment it for read from file last time requests
   */
-  $url .= '&FILTER[regTime][min]='.read_from_file();
+  $url .= '&FILTER[regTime][min]='.$lastTimeReg;
   $url .= '&api_username='.$api_username;
   $url .= '&api_password='.$api_password;
 //Init curl
@@ -167,22 +167,19 @@ function read_from_file()
    $date = 'Date: '.$today['hours'].':'.$today['wday'].':'.$today['minutes'].' '.$today['month'].' '.$today['wday'];
    $line = '========================================';
    $countArray = count($response->customers); //Count of records
-   $dataString = backToString($response->customers); //Response to string
-   $dataArray = HashRequest($response->customers);
+   $dataString = backToString($response->customers); //Response to string for log file
+   $dataArray = HashRequest($response->customers); //Hash response
    echo '<pre>' . var_export($dataArray, true) . '</pre>';
-   $hashdata = backToString(HashRequest($response->customers)); //hash response and make from array to string
+   $hashdata = backToString(HashRequest($response->customers)); //hash response and make string for API FB
    echo '<pre>'. var_export($hashdata, true) . '</pre>';
-   //record time to file
-   recordDate(getLastDate($dataArray));
-   //Ready text for log file
+   recordDate(getLastDate($dataArray));   //record regTime to file
+   //Write text for log file
    $log = $line.PHP_EOL.' Response Status: '.$response->status.PHP_EOL.' Records count: '.$countArray.PHP_EOL.$date.PHP_EOL.$dataString.PHP_EOL.$line;
-   //Ready text for hash log file
+   //Write text for hash log file
    $hashlog = $line.PHP_EOL.' Response Status: '.$response->status.PHP_EOL.' Records count: '.$countArray.PHP_EOL.$date.PHP_EOL.$hashdata.PHP_EOL.$line;
    //Recording to log files
-   //echo 'Recording log files<br/>';
    file_put_contents($filename, $log, FILE_APPEND);
    file_put_contents($hashfile, $hashlog, FILE_APPEND);
-   //echo 'File recorded'.PHP_EOL;
 
   //this data we should send to FB ---- $hashdata
  // FaceBook Api connect
@@ -191,10 +188,10 @@ function read_from_file()
  $facebook_link .= 'access_token='.
  $facebook_link .= 'EAACEdEose0cBABO5f5ZAOy3okp0B67b9IWt2lQkp3x2J8jsk3GQtTgblpQFXMYtqfgI5g4xE6IK0WcPQ0bVSZBdB8xandiPb2fJrcj9ZCHNg8UsSd98l5DfZCvxlhgnYfPcK12sRTI0mjX43WFRTC8cG3IaPT1iyQaHyZAd3ajanf62mJcZAK8ZBFXhymwu0UoZD';
  $facebook_link .= '&data=';
- $facebook_link .= $hashdata;
+ $facebook_link .= $hashdata; // Our data
  
  echo 'Making facebook request...<br/>';
- //making cUrl
+ //making cUrl request to FB
  $curlForFacebook = curl_init();
 curl_setopt_array($curlForFacebook, array(
   CURLOPT_URL => $facebook_link,
@@ -209,11 +206,12 @@ curl_setopt_array($curlForFacebook, array(
   ))
  );
 
- $facebook_response = curl_exec($curlForFacebook);
+ $facebook_response = curl_exec($curlForFacebook); //Execute
  $err = curl_error($curlForFacebook);
 
  curl_close($curlForFacebook);
 
+ //If error founded
  if ($err) {
    echo "cURL Error #:" . $err;
  } else {
