@@ -179,8 +179,11 @@ function read_from_file()
  // FaceBook Api connect
  //Creating link for cUrl fb
  $TOKEN = 'EAACbBwoW44YBAGsHjshdvt55TCsrk11jHvi2ULqFjsfBQ4JalrIW0UhdpBLvfCTzQnMgvSdsMOt9jRgjSSDkoZCMhWOZBNx6yTJGTr5pZBhzOvUEVMofKDDoPnCJGf841kGvHELO0RYGYFta6ctFFWp2CdmfNV1fOxmHpj8iNXPzDlVoZB5Y72qPik7wV5vZAmXQmE7ZC1KAZDZD';
- $facebook_link = 'https://graph.facebook.com/v2.12/1971209353202465/events?';
- $facebook_link .= 'access_token=';
+ $ID_BUSSINESS   = '1971209353202465';
+ $facebook_link  = 'https://graph.facebook.com/v2.12/';
+ $facebook_link .= $ID_BUSSINESS;
+ $facebook_link .= '/events';
+ $facebook_link .= '?access_token=';
  $facebook_link .= $TOKEN;
  $facebook_link .= '&data=';
  $facebook_link .= $hashdata; // Our data(hashed)
