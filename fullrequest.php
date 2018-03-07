@@ -78,10 +78,6 @@ foreach($data as $mini_data)
 	 case 'country':
 	  $mini_array['country'] = hash('sha256', $value);
 	 break;
-
-	 case 'country':
-	  $mini_array['country'] = hash('sha256', $value);
-	 break;
 	}
    }
   }
@@ -155,7 +151,7 @@ function read_from_file()
   curl_setopt($ch,CURLOPT_HEADER, false);
   $exec = curl_exec($ch);
   $response = json_decode($exec);
-  if($response->status == 'OK') //Ok
+  if($response->status == 'OK') //Success response
   {
    echo 'Request succeed: '.$response->status.'<br/>';
    echo 'Count of records: '. $countArray = count($response->customers).'<br/>'; //Count of records
