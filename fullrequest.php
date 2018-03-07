@@ -189,7 +189,7 @@ function read_from_file()
  $facebook_link .= 'access_token=';
  $facebook_link .= $token;
  $facebook_link .= '&data=';
- $facebook_link .= $hashdata; // Our data
+ $facebook_link .= $hashdata; // Our data(hashed)
  
  echo 'Making facebook request...<br/>';
  //making cUrl request to FB
