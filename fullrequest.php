@@ -88,7 +88,7 @@ foreach($data as $mini_data)
  }
  //Creating format for FB upload
  $new_data[]['match_keys'] = $mini_array;
- $last = count($new_data)-1; //getting creating items list of array
+ $last = count($new_data)-1; //getting last item of array for inception data
  $new_data[$last]['value']      = $value_balance;
  $new_data[$last]['currency']   = $currency; //adding keys to this item
  $new_data[$last]['event_name'] = 'AddPaymentInfo'; //Type of transaction
@@ -138,8 +138,7 @@ function read_from_file()
   $recordStart = 0; //PAGES by 500 records START FROM 0
   $url = 'http://affiliates.bx8.me/?MODULE='.$module; //module type
   $url .= '&COMMAND=View'; //action type = VIEW
-  //$url .= '&LIMIT[recordsToShow]='.$recordsToShow;
-  //$url .= '&LIMIT[recordStart]='.$recordStart;
+  //$url .= '&LIMIT[recordStart]='.$recordStart; //Can start items from this point
 
   /*First Time next line must be commented
     Because file is empty and filter is equal zero
