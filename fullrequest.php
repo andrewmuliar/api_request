@@ -127,16 +127,17 @@ function read_from_file()
  /*creating API request to get data from BX8, hashing and put in logs files*/
  function takeData()
  {
-  echo 'Last date from file: '.read_from_file().'<br/>';
+  $lastTimeReg = read_from_file();
+  echo 'Last date from file: '.$lastTimeReg.'<br/>';
   echo 'Making request for data....<br/>';
 // Request options
   $module = 'Customer';
-  $api_username = 'RND@leomarkets.com';
-  $api_password = '2Aj484$!2A';
-  $lastTimeReg = read_from_file(); //MAX 500 records
+  $api_username = 'RND@leomarkets.com'; //username
+  $api_password = '2Aj484$!2A'; // pass
+  //MAX 500 records
   $recordStart = 0; //PAGES by 500 records START FROM 0
-  $url = 'http://affiliates.bx8.me/?MODULE='.$module;
-  $url .= '&COMMAND=View';
+  $url = 'http://affiliates.bx8.me/?MODULE='.$module; //module type
+  $url .= '&COMMAND=View'; //action type = VIEW
   //$url .= '&LIMIT[recordsToShow]='.$recordsToShow;
   //$url .= '&LIMIT[recordStart]='.$recordStart;
 
@@ -144,7 +145,7 @@ function read_from_file()
     Because file is empty and filter is equal zero
 	Next times reComment it for read from file last time requests
   */
-  $url .= '&FILTER[regTime][min]='.$lastTimeReg;
+  $url .= '&FILTER[regTime][min]='.$lastTimeReg; //FILTER FOR NEW DATA
   $url .= '&api_username='.$api_username;
   $url .= '&api_password='.$api_password;
 //Init curl
@@ -161,7 +162,7 @@ function read_from_file()
   {
    echo 'Request succeed: '.$response->status.'<br/>';
    echo 'Count of records: '. $countArray = count($response->customers).'<br/>'; //Count of records
-   $filename = 'super_log_file.txt';
+   $filename = 'super_log_file.txt'; //Logs files
    $hashfile = 'super_hash_data.txt';
    $today = getdate();
    $date = 'Date: '.$today['hours'].':'.$today['wday'].':'.$today['minutes'].' '.$today['month'].' '.$today['wday'];
@@ -184,16 +185,17 @@ function read_from_file()
   //this data we should send to FB ---- $hashdata
  // FaceBook Api connect
  //Creating link for cUrl fb
+ $token = 'EAACbBwoW44YBAGsHjshdvt55TCsrk11jHvi2ULqFjsfBQ4JalrIW0UhdpBLvfCTzQnMgvSdsMOt9jRgjSSDkoZCMhWOZBNx6yTJGTr5pZBhzOvUEVMofKDDoPnCJGf841kGvHELO0RYGYFta6ctFFWp2CdmfNV1fOxmHpj8iNXPzDlVoZB5Y72qPik7wV5vZAmXQmE7ZC1KAZDZD';
  $facebook_link = 'https://graph.facebook.com/v2.12/1971209353202465/events?';
- $facebook_link .= 'access_token='.
- $facebook_link .= 'EAACEdEose0cBABO5f5ZAOy3okp0B67b9IWt2lQkp3x2J8jsk3GQtTgblpQFXMYtqfgI5g4xE6IK0WcPQ0bVSZBdB8xandiPb2fJrcj9ZCHNg8UsSd98l5DfZCvxlhgnYfPcK12sRTI0mjX43WFRTC8cG3IaPT1iyQaHyZAd3ajanf62mJcZAK8ZBFXhymwu0UoZD';
+ $facebook_link .= 'access_token=';
+ $facebook_link .= $token;
  $facebook_link .= '&data=';
  $facebook_link .= $hashdata; // Our data
  
  echo 'Making facebook request...<br/>';
  //making cUrl request to FB
  $curlForFacebook = curl_init();
-curl_setopt_array($curlForFacebook, array(
+ curl_setopt_array($curlForFacebook, array(
   CURLOPT_URL => $facebook_link,
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => "",
@@ -218,7 +220,7 @@ curl_setopt_array($curlForFacebook, array(
    echo $facebook_response;
  }  
    
-   // Status request
+// Status request
 }
  else
   echo 'Error when making request: '.$response->status;
