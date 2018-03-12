@@ -51,10 +51,18 @@ foreach($data as $mini_data)
    {
     switch ($key) //Change keys name for FB
 	{
+	 case 'email':
+	  $mini_array['email'] = hash('sha256', $value);
+	 break;
+
+	 case 'phone':
+	  $mini_array['phone'] = hash('sha256', $value);
+	 break;
+
 	 case 'gender': //Only one letter must be in
 	  if($value == 'Male')
 	   $mini_array['gen'] = hash('sha256', 'M');
-	  else
+	  else //Female
  	   $mini_array['gen'] = hash('sha256', 'F');
 	 break;
 
@@ -170,7 +178,6 @@ function read_from_file()
    $dataArray = HashRequest($response->customers); //Hash response
    echo '<pre>' . var_export($dataArray, true) . '</pre>';
    $hashdata = backToString(HashRequest($response->customers)); //hash response and make string for API FB
-   echo '<pre>'. var_export($hashdata, true) . '</pre>';
    recordDate(getLastDate($dataArray));   //record regTime to file
    //Write text for log file
    $log = $line.PHP_EOL.'Response Status: '.$response->status.PHP_EOL.' Records count: '.$countArray.PHP_EOL.$date.PHP_EOL.$dataString.PHP_EOL.$line;
