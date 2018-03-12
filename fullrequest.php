@@ -14,11 +14,11 @@ function HashRequest($data) //return array
  $currency = '';
  $timestamp;
  $value_balance;
- //Array of keys what we need to take
+ //Array of keys which we need to take
  $key_list = array('email',
 				   'phone',	
 				   'gender', //FORMAT MUST BE ONE LETTER
-				   //'birthday', -- format??
+				 //'birthday', -- format?? CAN BE YYYY MM DD OR ONE OF THIS
 				   'lastName',
 				   'firstName',
 				   'city',
@@ -34,14 +34,13 @@ foreach($data as $mini_data)
  {
   if(in_array($key, $key_list)) //If our key match with needed keys 
   {
-   if($key == 'currency') //We need pure currency not hashed and make uppercase
+   if($key == 'currency') //We need pure uppercase currency, not hashed
     {
      $currency = strtoupper($value);
 	}
-   else if($key == 'regTime') // We need timestamp 
+   else if($key == 'regTime') 
 	{
-	 $date = date_create($value);
-	 $timestamp = date_timestamp_get($date);
+	 $timestamp = date_timestamp_get(date_create($value));  // We need timestamp format
 	}
    else if($key == 'accountBalance')
    {
