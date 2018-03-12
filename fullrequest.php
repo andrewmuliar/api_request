@@ -176,7 +176,7 @@ function read_from_file()
   curl_setopt($ch,CURLOPT_HEADER, false);
   $exec = curl_exec($ch);
   $response = json_decode($exec);
-  echo var_export($response);
+  echo '<pre>' . var_export($response, true) . '</pre>';
   if($response->status == 'OK') //Success response
   {
    echo 'Request succeed: '.$response->status.'<br/>';
