@@ -18,7 +18,7 @@ function HashRequest($data) //return array
  $key_list = array('email',
 				   'phone',	
 				   'gender', //FORMAT MUST BE ONE LETTER
-				 //'birthday', -- format?? CAN BE YYYY MM DD OR ONE OF THIS
+				   'birthday', //-- YYYY-MM-DD
 				   'lastName',
 				   'firstName',
 				   'city',
@@ -65,6 +65,20 @@ foreach($data as $mini_data)
  	   $mini_array['gen'] = hash('sha256', 'F');
 	 break;
 
+	 case 'birthday':
+	  if($value != NULL)
+	  {
+	   $date = explode('-', $value);
+	   $year =  $date[0];
+	   $month = $date[1];
+	   $day = substr($date[2],0,2);
+	  // echo 'YEAR = '.$year.' MONTH = '.$month.' DAY = '.$day;
+	   $mini_array['doby'] = hash('sha256',$year);
+	   $mini_array['dobm'] = hash('sha256',$month);
+	   $mini_array['dobd'] = hash('sha256',$day);
+	  }
+	 break;
+
 	 case 'lastName':
 	  $mini_array['ln'] = hash('sha256', $value);
 	 break;
@@ -97,7 +111,7 @@ foreach($data as $mini_data)
  $last = count($new_data)-1; //getting last item of array for inception data
  $new_data[$last]['value']      = $value_balance;
  $new_data[$last]['currency']   = $currency; //adding keys to this item
- $new_data[$last]['event_name'] = 'AddPaymentInfo'; //Type of transaction
+ $new_data[$last]['event_name'] = 'Purchase'; //Type of transaction
  $new_data[$last]['event_time'] = $timestamp; //Adding time of transaction
 }
  return $new_data; //array
@@ -201,7 +215,7 @@ function read_from_file()
  $facebook_link .= '&data=';
  $facebook_link .= $hashdata; // Our data(hashed)
  $facebook_link .= '&upload_tag='; //Uploads tags
- $facebook_link .= 'uploads';
+ $facebook_link .= 'purchase';
  
  echo 'Making facebook request...<br/>';
  //making cUrl request to FB
