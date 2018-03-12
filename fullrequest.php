@@ -87,7 +87,7 @@ foreach($data as $mini_data)
 	 break;
 
 	 case 'country':
-	  $mini_array['country'] = hash('sha256', $value);
+	  $mini_array['country'] = hash('sha256', $value); //must be two-letter code
 	 break;
 	}
    }
