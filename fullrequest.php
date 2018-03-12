@@ -17,7 +17,7 @@ function HashRequest($data) //return array
  //Array of keys what we need to take
  $key_list = array('email',
 				   'phone',	
-				   'gender',
+				   'gender', //FORMAT MUST BE ONE LETTER
 				   //'birthday', -- format??
 				   'lastName',
 				   'firstName',
