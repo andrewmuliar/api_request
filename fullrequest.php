@@ -51,7 +51,7 @@ foreach($data as $mini_data)
    {
     switch ($key) //Change keys name for FB
 	{
-	 case 'gender':
+	 case 'gender': //Only one letter must be in
 	  if($value == 'Male')
 	   $mini_array['gen'] = hash('sha256', 'M');
 	  else
