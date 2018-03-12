@@ -133,7 +133,8 @@ function read_from_file()
   //MAX 500 records
   $recordStart = 0; //PAGES by 500 records START FROM 0
   $url = 'http://affiliates.bx8.me/?MODULE='.$module; //module type
-  $url .= '&COMMAND=View'; //action type = VIEW
+  $url .= '&COMMAND=';
+  $url .= 'View'; //action type = VIEW
   //$url .= '&LIMIT[recordStart]='.$recordStart; //Can start items from this point
   if($lastTimeReg != '') //If file NOT empty add to request FILTER
   {
