@@ -128,8 +128,10 @@ function read_from_file()
   echo 'Making request for data....<br/>';
 // Request options
   $module = 'Customer'; //Getting 'Customers' data
-  $api_username = 'RND@leomarkets.com'; //username
-  $api_password = '2Aj484$!2A'; // pass
+  //$api_username = 'RND@leomarkets.com'; //username
+  //$api_password = '2Aj484$!2A'; // pass
+  $api_username = 'FB_offline@test.com';
+  $api_password = 'HEvk69';
   //MAX 500 records
   $recordStart = 0; //PAGES by 500 records START FROM 0
   $url = 'http://affiliates.bx8.me/?MODULE='.$module; //module type
@@ -152,6 +154,7 @@ function read_from_file()
   curl_setopt($ch,CURLOPT_HEADER, false);
   $exec = curl_exec($ch);
   $response = json_decode($exec);
+  echo var_export($response);
   if($response->status == 'OK') //Success response
   {
    echo 'Request succeed: '.$response->status.'<br/>';
@@ -175,11 +178,13 @@ function read_from_file()
    //Recording to log files
    file_put_contents($filename, $log, FILE_APPEND);
    file_put_contents($hashfile, $hashlog, FILE_APPEND);
-
+  }
+  else echo $response;
+}
   //this data we should send to FB ---- $hashdata
  // FaceBook Api connect
  //Creating link for cUrl fb
- $TOKEN = 'EAAKU6gI8oi8BANVupRfx4hCR5qinRAs91FSQXn2nY4r8ixC97UeBek6kcFoYBZATq2Jwj8cekrK32O4gMEH4ck01N2Lv9pZAENPIDxczFd9C02ozJ4yvLreZCXGQogZBudwigVC6gWFFia49SasQFQ6RY8eyp9pJ7PBPc4Llbt3Hp5srDh21U6qJ45GAtTcQw0XULOPp8AZDZD';
+ /*$TOKEN = 'EAAKU6gI8oi8BANVupRfx4hCR5qinRAs91FSQXn2nY4r8ixC97UeBek6kcFoYBZATq2Jwj8cekrK32O4gMEH4ck01N2Lv9pZAENPIDxczFd9C02ozJ4yvLreZCXGQogZBudwigVC6gWFFia49SasQFQ6RY8eyp9pJ7PBPc4Llbt3Hp5srDh21U6qJ45GAtTcQw0XULOPp8AZDZD';
  $OFFLINE_CONV_ID   = '1971209353202465'; //parameter for this FB CONVERSION
  $facebook_link  = 'https://graph.facebook.com/v2.12/';
  $facebook_link .= $OFFLINE_CONV_ID;
@@ -227,7 +232,7 @@ function read_from_file()
  else
   echo 'Error when making request: '.$response->status;
   curl_close($ch); //close connection 
-}
+}*/
 
 //Init all functions to get Bx8 data, log files, API facebook integration
  takeData();
