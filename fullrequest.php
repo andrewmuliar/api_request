@@ -178,7 +178,7 @@ function read_from_file()
   //this data we should send to FB ---- $hashdata
  // FaceBook Api connect
  //Creating link for cUrl fb
- $TOKEN = 'EAACbBwoW44YBAFZBSaF4mzB3tLsAZBtJXGZAcDFZAZBcCZBonaOJiaB8nOfKppE17OuQCkWZCuzGwm8N3n0TykJ3MljKh5yZCZB4H5P8stjh4HZB7BYJ4zd8iLanxAmjI7frqGt9Fg9uWW6UKME8Ph1LdAzEZBoIXJv4dX151JhmaL1j8SFHVJMzLkFit3ihFnqMnw9ZCq29KTTARAZDZD';
+ $TOKEN = 'EAAKU6gI8oi8BANVupRfx4hCR5qinRAs91FSQXn2nY4r8ixC97UeBek6kcFoYBZATq2Jwj8cekrK32O4gMEH4ck01N2Lv9pZAENPIDxczFd9C02ozJ4yvLreZCXGQogZBudwigVC6gWFFia49SasQFQ6RY8eyp9pJ7PBPc4Llbt3Hp5srDh21U6qJ45GAtTcQw0XULOPp8AZDZD';
  $OFFLINE_CONV_ID   = '1971209353202465'; //parameter for this FB CONVERSION
  $facebook_link  = 'https://graph.facebook.com/v2.12/';
  $facebook_link .= $OFFLINE_CONV_ID;
@@ -187,6 +187,8 @@ function read_from_file()
  $facebook_link .= $TOKEN;
  $facebook_link .= '&data=';
  $facebook_link .= $hashdata; // Our data(hashed)
+ $facebook_link .= '&upload_tag=';
+ $facebook_link .= 'uploads';
  
  echo 'Making facebook request...<br/>';
  //making cUrl request to FB
