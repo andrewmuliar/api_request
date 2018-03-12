@@ -187,7 +187,7 @@ function read_from_file()
  $facebook_link .= $TOKEN;
  $facebook_link .= '&data=';
  $facebook_link .= $hashdata; // Our data(hashed)
- $facebook_link .= '&upload_tag=';
+ $facebook_link .= '&upload_tag='; //Uploads tags
  $facebook_link .= 'uploads';
  
  echo 'Making facebook request...<br/>';
