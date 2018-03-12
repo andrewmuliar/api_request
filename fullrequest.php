@@ -52,7 +52,10 @@ foreach($data as $mini_data)
     switch ($key) //Change keys name for FB
 	{
 	 case 'gender':
-	  $mini_array['gen'] = hash('sha256', $value);
+	  if($value == 'Male')
+	   $mini_array['gen'] = hash('sha256', 'M');
+	  else
+ 	   $mini_array['gen'] = hash('sha256', 'F');
 	 break;
 
 	 case 'lastName':
@@ -128,10 +131,8 @@ function read_from_file()
   echo 'Making request for data....<br/>';
 // Request options
   $module = 'Customer'; //Getting 'Customers' data
-  //$api_username = 'RND@leomarkets.com'; //username
-  //$api_password = '2Aj484$!2A'; // pass
-  $api_username = 'FB_offline@test.com';
-  $api_password = 'HEvk69';
+  $api_username = 'FB_offline@test.com'; //user
+  $api_password = 'HEvk69'; //pass
   //MAX 500 records
   $recordStart = 0; //PAGES by 500 records START FROM 0
   $url = 'http://affiliates.bx8.me/?MODULE='.$module; //module type
