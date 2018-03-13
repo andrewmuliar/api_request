@@ -41,11 +41,11 @@ function HashRequest($data) //return array
  else //Female
    $temp_array['gen'] = hash('sha256', 'F');
 
- $new_data[]['match_keys'] = $temp_array;
+ $new_data['match_keys'] = $temp_array;
  $last = count($new_data)-1; //getting last item of array for inception data (must be ZERO)
  //$new_data[$last]['value']      = $value_balance;
  //$new_data[$last]['currency']   = $currency; //adding keys to this item
- $new_data[$last]['event_name'] = 'Purchase'; //Type of transaction
+ $new_data['event_name'] = 'Purchase'; //Type of transaction
  //$new_data[$last]['event_time'] = $timestamp; //Adding time of transaction
 /*				   'accountBalance',
 				   'country',
@@ -197,7 +197,7 @@ function createCustomerFilter($depositResponse)
  for($j = 0; $j<count($response); $j++)
  {
   echo '<pre>'.var_export(HashRequest($response[$j]->Response->customers[0])).'</pre>';
-  $dataForFb[] = HashRequest($response[$j]->Response->customers[0]);
+  array_push ($dataForFb, HashRequest($response[$j]->Response->customers[0]));
  }
  echo '<pre>'.var_export(backToString($dataForFb)).'</pre>';
 //takeData();
