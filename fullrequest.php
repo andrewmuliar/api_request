@@ -166,8 +166,6 @@ function getResponse($module, $lastTimeReg, $filter)
 
  if($filter != '') //adding filters if exists
   $url .= $filter;
- $url .= '&FILTER[id][]=b18670d4-489c-41a1-a02d-a8a100fc0c47';
- //$url .= '&FILTER[id][]=b18670d4-489c-41a1-a02d-a8a100fc048';
  $url .= '&api_username='.$api_username;
  $url .= '&api_password='.$api_password;
  echo $url;
@@ -208,15 +206,13 @@ function createCustomerFilter($depositResponse)
   return 'Error in depositResponse request';
 }
  //Getting response from LAST DATE by Deposites
- //$yesterday = date('Y_m_d', strtotime("-1 days")); //Getting yesteday date for checking
- //$depositResponse = getResponse('CustomerDeposits', $yesterday, '');
- //$filter = createCustomerFilter($depositResponse);
- //var_export(getResponse('Customer','',$filter));
- var_export(getResponse('Customer','',''));
+ $yesterday = date('Y_m_d', strtotime("-1 days")); //Getting yesteday date for checking
+ $depositResponse = getResponse('CustomerDeposits', $yesterday, '');
+ $filter = createCustomerFilter($depositResponse);
+ var_export(getResponse('Customer','',$filter));
  /*creating API request to get data from BX8, hashing and put in logs files*/
  function takeData()
  { 
-  
  }
  /*
   2. Creating filter string by customers
