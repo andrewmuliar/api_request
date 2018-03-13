@@ -148,9 +148,8 @@ function read_from_file()
   
   $module = 'Customer'; 
 */
-function getResponse($module, $lastTimeReg) 
+function getResponse($module, $lastTimeReg, $filter) 
 {
-
  $api_username = 'FB_offline@test.com'; //user
  $api_password = 'HEvk69'; //pass
  //MAX 500 records
@@ -161,34 +160,65 @@ function getResponse($module, $lastTimeReg)
  //$url .= '&LIMIT[recordStart]='.$recordStart; //Can start items from this point
  if($lastTimeReg != '') //If file NOT empty add to request FILTER
  {
-  $url .= '&FILTER[confirmTime][min]='.$lastTimeReg; //FILTER FOR NEW DATA 
+  $url .= '&FILTER[date][min]='.$lastTimeReg; //FILTER FOR NEW DATA 
+  //$url .= '&FILTER[date][max] = ';
  }
+
+ if($filter != '') //adding filters if exists
+  $url .= $filter;
+ $url .= '&FILTER[id][]=b18670d4-489c-41a1-a02d-a8a100fc0c47';
+ //$url .= '&FILTER[id][]=b18670d4-489c-41a1-a02d-a8a100fc048';
  $url .= '&api_username='.$api_username;
  $url .= '&api_password='.$api_password;
+ echo $url;
 //Init curl
-  $ch = curl_init($url);
-  curl_setopt($ch,CURLOPT_RETURNTRANSFER,true); //LEADS
-  curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,20);
-  curl_setopt($ch,CURLOPT_TIMEOUT,30);
-  curl_setopt($ch,CURLOPT_FOLLOWLOCATION, false);
-  curl_setopt($ch,CURLOPT_HTTPHEADER,["Content-Type:application/x-www-form-urlencoded; charset=utf-8"]);
-  curl_setopt($ch,CURLOPT_HEADER, false);
-  $exec = curl_exec($ch);
-  $response = json_decode($exec);
-  echo '<pre>' . var_export($response, true) . '</pre>';
+ $ch = curl_init($url);
+ curl_setopt($ch,CURLOPT_RETURNTRANSFER,true); //LEADS
+ curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,20);
+ curl_setopt($ch,CURLOPT_TIMEOUT,30);
+ curl_setopt($ch,CURLOPT_FOLLOWLOCATION, false);
+ curl_setopt($ch,CURLOPT_HTTPHEADER,["Content-Type:application/x-www-form-urlencoded; charset=utf-8"]);
+ curl_setopt($ch,CURLOPT_HEADER, false);
+ $exec = curl_exec($ch);
+ $response = json_decode($exec);
+ echo '<pre>' . var_export($response, true) . '</pre>';
+ return $response;
 }
 
-
-
+//Creating Cusomers list from Deposite Response
+function createCustomerFilter($depositResponse)
+{
+ if($depositResponse->status == 'OK') //Request is OK
+ {
+  $filterString = '';
+  foreach($depositResponse->deposits as $key) //parse array
+  {
+   foreach( $key as $next => $value) // getting all customerId
+   {
+    if($next == 'customerId')
+     $filterString .= '&FILTER[id][]='.$value; 
+   }
+  }
+  return $filterString;
+ }
+ // FILTER[id][]=1&FILTER[id][]=2&FILTER[regTime][min]=2017_06_05
+ else if($depositResponse->status == 'No results') //If request is empty
+  return 'No results from this date';
+ else //Error in request
+  return 'Error in depositResponse request';
+}
+ //Getting response from LAST DATE by Deposites
+ //$yesterday = date('Y_m_d', strtotime("-1 days")); //Getting yesteday date for checking
+ //$depositResponse = getResponse('CustomerDeposits', $yesterday, '');
+ //$filter = createCustomerFilter($depositResponse);
+ //var_export(getResponse('Customer','',$filter));
+ var_export(getResponse('Customer','',''));
  /*creating API request to get data from BX8, hashing and put in logs files*/
  function takeData()
  { 
+  
  }
  /*
-  1. Get customers ID list from Deposit with LastTime
-     - Read from file
-	   If empty no FILTER
-	   else make filter by time
   2. Creating filter string by customers
 	  - Request for all costumers
 
@@ -304,7 +334,6 @@ function getResponse($module, $lastTimeReg)
 }*/
 
 //Init all functions to get Bx8 data, log files, API facebook integration
- getResponse('CustomerDeposits', '2018_03_12');
  //takeData();
 
 ?>
