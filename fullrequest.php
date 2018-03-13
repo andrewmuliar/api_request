@@ -225,8 +225,6 @@ function createCustomerFilter($depositResponse)
  $facebook_response = curl_exec($curlForFacebook); //Execute
  $err = curl_error($curlForFacebook);
 
- curl_close($curlForFacebook);
-
  //If error founded
  if ($err) 
  {
@@ -236,13 +234,14 @@ function createCustomerFilter($depositResponse)
  {
   echo $facebook_response; //response cURL FB API
  } 
+ 
+ curl_close($curlForFacebook); //close connection 
 }
 
  $yesterday = date('Y_m_d', strtotime("-1 days")); //Getting yesteday date for checking
  $depositResponse = getResponse('CustomerDeposits', $yesterday, ''); //Getting response from LAST DATE by Deposites
  $filter = createCustomerFilter($depositResponse); //Creting filter for CustomerRequest
  var_export(getResponse('Customer','',$filter));
-//Init all functions to get Bx8 data, log files, API facebook integration
- //takeData();
+//takeData();
 
 ?>
