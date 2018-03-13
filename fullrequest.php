@@ -205,96 +205,28 @@ function createCustomerFilter($depositResponse)
  else //Error in request
   return 'Error in depositResponse request';
 }
- //Getting response from LAST DATE by Deposites
- $yesterday = date('Y_m_d', strtotime("-1 days")); //Getting yesteday date for checking
- $depositResponse = getResponse('CustomerDeposits', $yesterday, '');
- $filter = createCustomerFilter($depositResponse);
- var_export(getResponse('Customer','',$filter));
  /*creating API request to get data from BX8, hashing and put in logs files*/
- function takeData()
- { 
- }
- /*
-  2. Creating filter string by customers
-	  - Request for all costumers
-
-  3. Make FB request for costumers 
-     - With deposite value! 
- */
- /*  $lastTimeReg = read_from_file();
-  echo 'Last date from file: '.$lastTimeReg.'<br/>';
-  echo 'Making request for data....<br/>';
-// Request options
-  $module = 'Customer'; //Getting 'Customers' data
-  $api_username = 'FB_offline@test.com'; //user
-  $api_password = 'HEvk69'; //pass
-  //MAX 500 records
-  $recordStart = 0; //PAGES by 500 records START FROM 0
-  $url = 'http://affiliates.bx8.me/?MODULE='.$module; //module type
-  $url .= '&COMMAND=';
-  $url .= 'View'; //action type = VIEW
-  //$url .= '&LIMIT[recordStart]='.$recordStart; //Can start items from this point
-  if($lastTimeReg != '') //If file NOT empty add to request FILTER
-  {
-   $url .= '&FILTER[regTime][min]='.$lastTimeReg; //FILTER FOR NEW DATA 
-  }
-  $url .= '&api_username='.$api_username;
-  $url .= '&api_password='.$api_password;
-//Init curl
-  $ch = curl_init($url);
-  curl_setopt($ch,CURLOPT_RETURNTRANSFER,true); //LEADS
-  curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,20);
-  curl_setopt($ch,CURLOPT_TIMEOUT,30);
-  curl_setopt($ch,CURLOPT_FOLLOWLOCATION, false);
-  curl_setopt($ch,CURLOPT_HTTPHEADER,["Content-Type:application/x-www-form-urlencoded; charset=utf-8"]);
-  curl_setopt($ch,CURLOPT_HEADER, false);
-  $exec = curl_exec($ch);
-  $response = json_decode($exec);
-  echo '<pre>' . var_export($response, true) . '</pre>';
-  if($response->status == 'OK') //Success response
-  {
-   echo 'Request succeed: '.$response->status.'<br/>';
-   echo 'Count of records: '. $countArray = count($response->customers).'<br/>'; //Count of records
-   $filename = 'super_log_file.txt'; //Logs files
-   $hashfile = 'super_hash_data.txt';
-   $today = getdate();
-   $date = 'Date: '.$today['hours'].':'.$today['wday'].':'.$today['minutes'].' '.$today['month'].' '.$today['wday'];
-   $line = '========================================';
-   $countArray = count($response->customers); //Count of records
-   $dataString = backToString($response->customers); //Response to string for log file
-   $dataArray = HashRequest($response->customers); //Hash response
-   echo '<pre>' . var_export($dataArray, true) . '</pre>';
-   $hashdata = backToString(HashRequest($response->customers)); //hash response and make string for API FB
-   recordDate(getLastDate($dataArray));   //record regTime to file
-   //Write text for log file
-   $log = $line.PHP_EOL.'Response Status: '.$response->status.PHP_EOL.' Records count: '.$countArray.PHP_EOL.$date.PHP_EOL.$dataString.PHP_EOL.$line;
-   //Write text for hash log file
-   $hashlog = $line.PHP_EOL.'Response Status: '.$response->status.PHP_EOL.' Records count: '.$countArray.PHP_EOL.$date.PHP_EOL.$hashdata.PHP_EOL.$line;
-   //Recording to log files
-   file_put_contents($filename, $log, FILE_APPEND);
-   file_put_contents($hashfile, $hashlog, FILE_APPEND);
-  }
-  else echo $response;
-}
-  //this data we should send to FB ---- $hashdata
- // FaceBook Api connect
- //Creating link for cUrl fb
- /*$TOKEN = 'EAAKU6gI8oi8BANVupRfx4hCR5qinRAs91FSQXn2nY4r8ixC97UeBek6kcFoYBZATq2Jwj8cekrK32O4gMEH4ck01N2Lv9pZAENPIDxczFd9C02ozJ4yvLreZCXGQogZBudwigVC6gWFFia49SasQFQ6RY8eyp9pJ7PBPc4Llbt3Hp5srDh21U6qJ45GAtTcQw0XULOPp8AZDZD';
- $OFFLINE_CONV_ID   = '1971209353202465'; //parameter for this FB CONVERSION
- $facebook_link  = 'https://graph.facebook.com/v2.12/';
- $facebook_link .= $OFFLINE_CONV_ID;
- $facebook_link .= '/events';
- $facebook_link .= '?access_token=';
- $facebook_link .= $TOKEN;
- $facebook_link .= '&data=';
- $facebook_link .= $hashdata; // Our data(hashed)
- $facebook_link .= '&upload_tag='; //Uploads tags
- $facebook_link .= 'purchase';
- 
- echo 'Making facebook request...<br/>';
- //making cUrl request to FB
- $curlForFacebook = curl_init();
- curl_setopt_array($curlForFacebook, array(
+ function makeFbConversion()
+ {
+  $dataString = backToString($response->customers); //Response to string for log file
+  $dataArray = HashRequest($response->customers); //Hash response
+   //this data we should send to FB ---- $hashdata
+   // FaceBook Api connect
+   //Creating link for cUrl fb
+  $TOKEN = 'EAAKU6gI8oi8BANVupRfx4hCR5qinRAs91FSQXn2nY4r8ixC97UeBek6kcFoYBZATq2Jwj8cekrK32O4gMEH4ck01N2Lv9pZAENPIDxczFd9C02ozJ4yvLreZCXGQogZBudwigVC6gWFFia49SasQFQ6RY8eyp9pJ7PBPc4Llbt3Hp5srDh21U6qJ45GAtTcQw0XULOPp8AZDZD';
+  $OFFLINE_CONV_ID   = '1971209353202465'; //parameter for this FB CONVERSION
+  $facebook_link  = 'https://graph.facebook.com/v2.12/';
+  $facebook_link .= $OFFLINE_CONV_ID;
+  $facebook_link .= '/events';
+  $facebook_link .= '?access_token=';
+  $facebook_link .= $TOKEN;
+  $facebook_link .= '&data=';
+  $facebook_link .= $hashdata; // Our data(hashed)
+  $facebook_link .= '&upload_tag='; //Uploads tags
+  $facebook_link .= 'purchase';
+  //making cUrl request to FB
+  $curlForFacebook = curl_init();
+  curl_setopt_array($curlForFacebook, array(
   CURLOPT_URL => $facebook_link,
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => "",
@@ -320,15 +252,13 @@ function createCustomerFilter($depositResponse)
  else 
  {
   echo $facebook_response; //response cURL FB API
- }  
-   
-// Status request
+ } 
 }
- else
-  echo 'Error when making request: '.$response->status;
-  curl_close($ch); //close connection 
-}*/
 
+ $yesterday = date('Y_m_d', strtotime("-1 days")); //Getting yesteday date for checking
+ $depositResponse = getResponse('CustomerDeposits', $yesterday, ''); //Getting response from LAST DATE by Deposites
+ $filter = createCustomerFilter($depositResponse); //Creting filter for CustomerRequest
+ var_export(getResponse('Customer','',$filter));
 //Init all functions to get Bx8 data, log files, API facebook integration
  //takeData();
 
