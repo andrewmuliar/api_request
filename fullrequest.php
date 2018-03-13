@@ -14,26 +14,38 @@ function HashRequest($data) //return array
  $currency = '';
  $timestamp;
  $value_balance;
- //Array of keys which we need to take
- $key_list = array('email',
-				   'phone',	
-				   'gender',    // MUST BE ONE LETTER
-				   'birthday', //  YYYY-MM-DD
-				   'lastName',
-				   'firstName',
-				   'city',
-				   'state',
-				   'postCode',
+ $new_data['email']   = hash('sha256', $data->email);
+ $new_data['phone']   = hash('sha256', $data->phone);
+ $new_data['doby']    = hash('sha256', $data->phone);
+ $new_data['dobm']    = hash('sha256', $data->phone);
+ $new_data['dobd']    = hash('sha256', $data->phone);
+ $new_data['ln']      = hash('sha256', $data->lastName);
+ $new_data['fn']      = hash('sha256', $data->firstName);
+ $new_data['ct']      = hash('sha256', $data->city);
+ $new_data['st']      = hash('sha256', $data->state);
+ $new_data['zip']     = hash('sha256', $data->postCode);
+ $new_data['country'] = hash('sha256', $data->country);
+
+ //Parsing date birthday
+ $date = explode('-', $data->birthday);
+ $year =  $date[0];
+ $month = $date[1];
+ $day = substr($date[2],0,2);
+
+ $new_data['doby'] = hash('sha256',$year);
+ $new_data['dobm'] = hash('sha256',$month);
+ $new_data['dobd'] = hash('sha256',$day);
+
+ //Detect gender and make one hashed letter
+ if($data->gender == 'Male')
+   $mini_array['gen'] = hash('sha256', 'M');
+ else //Female
+   $mini_array['gen'] = hash('sha256', 'F');
+
+
 				   'accountBalance',
 				   'country',
-				   'regTime',
 				   'currency');
-foreach($data as $mini_data)
-{
- foreach($mini_data as $key => $value)
- {
-  if(in_array($key, $key_list)) //If our key match with needed keys 
-  {
    if($key == 'currency') //We need pure uppercase currency, not hashed
     {
      $currency = strtoupper($value);
@@ -46,29 +58,7 @@ foreach($data as $mini_data)
    {
     $value_balance = $value; //value = accountBalance ??
    }
-   else
-   {
-    switch ($key) //Change keys name for FB
-	{
-	 case 'email':
-	  $mini_array['email'] = hash('sha256', $value);
-	 break;
-
-	 case 'phone':
-	  $mini_array['phone'] = hash('sha256', $value);
-	 break;
-
-	 case 'gender': //Only one letter must be in
-	  if($value == 'Male')
-	   $mini_array['gen'] = hash('sha256', 'M');
-	  else //Female
- 	   $mini_array['gen'] = hash('sha256', 'F');
-	 break;
-
-	 case 'birthday':
-	  if($value != NULL)
-	  {
-	   $date = explode('-', $value);
+	   $date = explode('-', $data->birthday);
 	   $year =  $date[0];
 	   $month = $date[1];
 	   $day = substr($date[2],0,2);
@@ -113,7 +103,7 @@ foreach($data as $mini_data)
  $new_data[$last]['currency']   = $currency; //adding keys to this item
  $new_data[$last]['event_name'] = 'Purchase'; //Type of transaction
  $new_data[$last]['event_time'] = $timestamp; //Adding time of transaction
-}
+}*/
  return $new_data; //array
 }
 
@@ -172,17 +162,22 @@ function createCustomerFilter($depositResponse)
  if($depositResponse->status == 'OK') //Request is OK
  {
   $filterString = '';
+  $i = 0;
+  $bathc = "&BATCH['.$i.']";
   foreach($depositResponse->deposits as $key) //parse array
   {
    foreach( $key as $next => $value) // getting all customerId
    {
     if($next == 'customerId')
-     $filterString .= '&FILTER[id][]='.$value; 
+	{
+	 //Creating request with few BATCH
+     $filterString .= '&BATCH['.$i.'][MODULE]=Customer&BATCH['.$i.'][COMMAND]=View&BATCH['.$i.'][FILTER][id][]='.$value; 
+	 $i++;
+	}
    }
   }
   return $filterString;
  }
- // FILTER[id][]=1&FILTER[id][]=2&FILTER[regTime][min]=2017_06_05
  else if($depositResponse->status == 'No results') //If request is empty
   return 'No results from this date';
  else //Error in request
@@ -240,8 +235,17 @@ function createCustomerFilter($depositResponse)
 
  $yesterday = date('Y_m_d', strtotime("-1 days")); //Getting yesteday date for checking
  $depositResponse = getResponse('CustomerDeposits', $yesterday, ''); //Getting response from LAST DATE by Deposites
- $filter = createCustomerFilter($depositResponse); //Creting filter for CustomerRequest
- var_export(getResponse('Customer','',$filter));
+ $filter = createCustomerFilter($depositResponse); //Creating filter for CustomerRequest
+ $response = getResponse('Customer','',$filter);
+ $dataForFb = array();
+ //$response[0]->Response->customers[0] -- this data need to parse
+ for($j = 0; $j<count($response); $j++)
+ {
+  $dataForFb[] = HashRequest($response[$j]->Response->customers[0]);
+ }
+ var_export($dataForFb);
+ //var_export(HashRequest($response));
+ //var_export();
 //takeData();
 
 ?>
