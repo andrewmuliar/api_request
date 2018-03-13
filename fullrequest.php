@@ -9,101 +9,63 @@
  /*Start read array for hashing*/
 function HashRequest($data) //return array
 {
- $new_data = array();
- $mini_array = array();
+ $temp_array = array();
  $currency = '';
  $timestamp;
  $value_balance;
- $new_data['email']   = hash('sha256', $data->email);
- $new_data['phone']   = hash('sha256', $data->phone);
- $new_data['doby']    = hash('sha256', $data->phone);
- $new_data['dobm']    = hash('sha256', $data->phone);
- $new_data['dobd']    = hash('sha256', $data->phone);
- $new_data['ln']      = hash('sha256', $data->lastName);
- $new_data['fn']      = hash('sha256', $data->firstName);
- $new_data['ct']      = hash('sha256', $data->city);
- $new_data['st']      = hash('sha256', $data->state);
- $new_data['zip']     = hash('sha256', $data->postCode);
- $new_data['country'] = hash('sha256', $data->country);
+ $temp_array['email']   = hash('sha256', $data->email);
+ $temp_array['phone']   = hash('sha256', $data->phone);
+ $temp_array['doby']    = hash('sha256', $data->phone);
+ $temp_array['dobm']    = hash('sha256', $data->phone);
+ $temp_array['dobd']    = hash('sha256', $data->phone);
+ $temp_array['ln']      = hash('sha256', $data->lastName);
+ $temp_array['fn']      = hash('sha256', $data->firstName);
+ $temp_array['ct']      = hash('sha256', $data->city);
+ $temp_array['st']      = hash('sha256', $data->state);
+ $temp_array['zip']     = hash('sha256', $data->postCode);
+ $temp_array['country'] = hash('sha256', $data->country); //must be two-letter code in DB number??
 
  //Parsing date birthday
- $date = explode('-', $data->birthday);
+ /*$date = explode('-', $data->birthday);
  $year =  $date[0];
  $month = $date[1];
  $day = substr($date[2],0,2);
 
- $new_data['doby'] = hash('sha256',$year);
- $new_data['dobm'] = hash('sha256',$month);
- $new_data['dobd'] = hash('sha256',$day);
+ $temp_array['doby'] = hash('sha256',$year);
+ $temp_array['dobm'] = hash('sha256',$month);
+ $temp_array['dobd'] = hash('sha256',$day);*/
 
  //Detect gender and make one hashed letter
  if($data->gender == 'Male')
-   $mini_array['gen'] = hash('sha256', 'M');
+   $temp_array['gen'] = hash('sha256', 'M');
  else //Female
-   $mini_array['gen'] = hash('sha256', 'F');
+   $temp_array['gen'] = hash('sha256', 'F');
 
-
-				   'accountBalance',
+ $new_data[]['match_keys'] = $temp_array;
+ $last = count($new_data)-1; //getting last item of array for inception data (must be ZERO)
+ //$new_data[$last]['value']      = $value_balance;
+ //$new_data[$last]['currency']   = $currency; //adding keys to this item
+ $new_data[$last]['event_name'] = 'Purchase'; //Type of transaction
+ //$new_data[$last]['event_time'] = $timestamp; //Adding time of transaction
+/*				   'accountBalance',
 				   'country',
-				   'currency');
-   if($key == 'currency') //We need pure uppercase currency, not hashed
-    {
-     $currency = strtoupper($value);
-	}
-   else if($key == 'regTime') 
-	{
-	 $timestamp = date_timestamp_get(date_create($value));  // We need timestamp format
-	}
-   else if($key == 'accountBalance')
-   {
-    $value_balance = $value; //value = accountBalance ??
-   }
-	   $date = explode('-', $data->birthday);
-	   $year =  $date[0];
-	   $month = $date[1];
-	   $day = substr($date[2],0,2);
-	  // echo 'YEAR = '.$year.' MONTH = '.$month.' DAY = '.$day;
-	   $mini_array['doby'] = hash('sha256',$year);
-	   $mini_array['dobm'] = hash('sha256',$month);
-	   $mini_array['dobd'] = hash('sha256',$day);
-	  }
-	 break;
-
-	 case 'lastName':
-	  $mini_array['ln'] = hash('sha256', $value);
-	 break;
-
-	 case 'firstName':
-	  $mini_array['fn'] = hash('sha256', $value);
-	 break;
-
-	 case 'city':
-	  $mini_array['ct'] = hash('sha256', $value);
-	 break;
-
-	 case 'state':
-	  $mini_array['st'] = hash('sha256', $value);
-	 break;
-
-	 case 'postCode':
-	  $mini_array['zip'] = hash('sha256', $value);
-	 break;
-
-	 case 'country':
-	  $mini_array['country'] = hash('sha256', $value); //must be two-letter code
-	 break;
-	}
-   }
+				   'currency');*/
+ /*if($key == 'currency') //We need pure uppercase currency, not hashed
+ {
+  $currency = strtoupper($value);
+ }
+  else if($key == 'regTime') 
+  {
+   $timestamp = date_timestamp_get(date_create($value));  // We need timestamp format
+  }
+  else if($key == 'accountBalance')
+  {
+   $value_balance = $value; //value = accountBalance ??
   }
  }
- //Creating format for FB upload
- $new_data[]['match_keys'] = $mini_array;
- $last = count($new_data)-1; //getting last item of array for inception data
- $new_data[$last]['value']      = $value_balance;
- $new_data[$last]['currency']   = $currency; //adding keys to this item
- $new_data[$last]['event_name'] = 'Purchase'; //Type of transaction
- $new_data[$last]['event_time'] = $timestamp; //Adding time of transaction
-}*/
+   }
+  }
+ }*/
  return $new_data; //array
 }
 
@@ -111,13 +73,6 @@ function HashRequest($data) //return array
 function backToString($array)
 {
  return json_encode(array_values($array));
-}
-
-//Getting date from last array item
-function getLastDate($array)
-{
- $count = count($array);
- return date('Y_m_d',$array[$count-1]['event_time']);
 }
 
 //Getting response from CRM request
@@ -241,11 +196,9 @@ function createCustomerFilter($depositResponse)
  //$response[0]->Response->customers[0] -- this data need to parse
  for($j = 0; $j<count($response); $j++)
  {
+  echo '<pre>'.var_export(HashRequest($response[$j]->Response->customers[0])).'</pre>';
   $dataForFb[] = HashRequest($response[$j]->Response->customers[0]);
  }
- var_export($dataForFb);
- //var_export(HashRequest($response));
- //var_export();
+ echo '<pre>'.var_export(backToString($dataForFb)).'</pre>';
 //takeData();
-
 ?>
