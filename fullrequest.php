@@ -122,6 +122,7 @@ function backToString($array)
 {
  return json_encode(array_values($array));
 }
+
 //Getting date from last array item
 function getLastDate($array)
 {
@@ -129,25 +130,7 @@ function getLastDate($array)
  return date('Y_m_d',$array[$count-1]['event_time']);
 }
 
-//Record last timestamp to file for next time filtering
-function recordDate($date)
-{
- $file = fopen("time_records.txt", "w");
- fwrite($file, $date); //reWriteing date ti file
- fclose($file);
-}
-//Reading last regrTime from file
-function read_from_file()
-{
- $file = fopen("time_records.txt", "r");
- $date_from_file = fgets($file);
- fclose($file);
- return $date_from_file;
-}
-/*Function for making request to CRM
-  
-  $module = 'Customer'; 
-*/
+//Getting response from CRM request
 function getResponse($module, $lastTimeReg, $filter) 
 {
  $api_username = 'FB_offline@test.com'; //user
