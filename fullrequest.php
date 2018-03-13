@@ -147,7 +147,18 @@ function read_from_file()
  /*creating API request to get data from BX8, hashing and put in logs files*/
  function takeData()
  { 
-  $lastTimeReg = read_from_file();
+ /*
+  1. Get customers ID list from Deposit with LastTime
+     - Read from file
+	   If empty no FILTER
+	   else make filter by time
+  2. Creating filter string by customers
+	  - Request for all costumers
+
+  3. Make FB request for costumers 
+     - With deposite value! 
+ */
+   $lastTimeReg = read_from_file();
   echo 'Last date from file: '.$lastTimeReg.'<br/>';
   echo 'Making request for data....<br/>';
 // Request options
