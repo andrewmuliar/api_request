@@ -17,8 +17,8 @@ function HashRequest($data) //return array
  //Array of keys which we need to take
  $key_list = array('email',
 				   'phone',	
-				   'gender', //FORMAT MUST BE ONE LETTER
-				   'birthday', //-- YYYY-MM-DD
+				   'gender',    // MUST BE ONE LETTER
+				   'birthday', //  YYYY-MM-DD
 				   'lastName',
 				   'firstName',
 				   'city',
@@ -141,7 +141,7 @@ function getResponse($module, $lastTimeReg, $filter)
  $url .= '&COMMAND=';
  $url .= 'View'; //action type = VIEW
  //$url .= '&LIMIT[recordStart]='.$recordStart; //Can start items from this point
- if($lastTimeReg != '') //If file NOT empty add to request FILTER
+ if($lastTimeReg != '') //If param NOT empty add to request FILTER
  {
   $url .= '&FILTER[date][min]='.$lastTimeReg; //FILTER FOR NEW DATA 
   //$url .= '&FILTER[date][max] = ';
