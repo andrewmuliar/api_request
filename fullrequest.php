@@ -144,9 +144,46 @@ function read_from_file()
  fclose($file);
  return $date_from_file;
 }
+/*Function for making request to CRM
+  
+  $module = 'Customer'; 
+*/
+function getResponse($module, $lastTimeReg) 
+{
+
+ $api_username = 'FB_offline@test.com'; //user
+ $api_password = 'HEvk69'; //pass
+ //MAX 500 records
+ $recordStart = 0; //PAGES by 500 records START FROM 0
+ $url = 'http://affiliates.bx8.me/?MODULE='.$module; //module type
+ $url .= '&COMMAND=';
+ $url .= 'View'; //action type = VIEW
+ //$url .= '&LIMIT[recordStart]='.$recordStart; //Can start items from this point
+ if($lastTimeReg != '') //If file NOT empty add to request FILTER
+ {
+  $url .= '&FILTER[confirmTime][min]='.$lastTimeReg; //FILTER FOR NEW DATA 
+ }
+ $url .= '&api_username='.$api_username;
+ $url .= '&api_password='.$api_password;
+//Init curl
+  $ch = curl_init($url);
+  curl_setopt($ch,CURLOPT_RETURNTRANSFER,true); //LEADS
+  curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,20);
+  curl_setopt($ch,CURLOPT_TIMEOUT,30);
+  curl_setopt($ch,CURLOPT_FOLLOWLOCATION, false);
+  curl_setopt($ch,CURLOPT_HTTPHEADER,["Content-Type:application/x-www-form-urlencoded; charset=utf-8"]);
+  curl_setopt($ch,CURLOPT_HEADER, false);
+  $exec = curl_exec($ch);
+  $response = json_decode($exec);
+  echo '<pre>' . var_export($response, true) . '</pre>';
+}
+
+
+
  /*creating API request to get data from BX8, hashing and put in logs files*/
  function takeData()
  { 
+ }
  /*
   1. Get customers ID list from Deposit with LastTime
      - Read from file
@@ -158,7 +195,7 @@ function read_from_file()
   3. Make FB request for costumers 
      - With deposite value! 
  */
-   $lastTimeReg = read_from_file();
+ /*  $lastTimeReg = read_from_file();
   echo 'Last date from file: '.$lastTimeReg.'<br/>';
   echo 'Making request for data....<br/>';
 // Request options
@@ -267,6 +304,7 @@ function read_from_file()
 }*/
 
 //Init all functions to get Bx8 data, log files, API facebook integration
- takeData();
+ getResponse('CustomerDeposits', '2018_03_12');
+ //takeData();
 
 ?>
