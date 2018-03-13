@@ -189,10 +189,10 @@ function createCustomerFilter($depositResponse)
   return 'Error in depositResponse request';
 }
  /*creating API request to get data from BX8, hashing and put in logs files*/
- function makeFbConversion()
+ function makeFbConversion($customers)
  {
-  $dataString = backToString($response->customers); //Response to string for log file
-  $dataArray = HashRequest($response->customers); //Hash response
+  $dataString = backToString($customers); //Response to string for log file
+  $dataArray = HashRequest($customers); //Hash response
    //this data we should send to FB ---- $hashdata
    // FaceBook Api connect
    //Creating link for cUrl fb
