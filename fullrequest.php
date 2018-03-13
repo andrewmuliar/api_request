@@ -206,7 +206,7 @@ function createCustomerFilter($depositResponse)
   $facebook_link .= '&data=';
   $facebook_link .= $hashdata; // Our data(hashed)
   $facebook_link .= '&upload_tag='; //Uploads tags
-  $facebook_link .= 'purchase';
+  $facebook_link .= 'daily'; //daily upload_tag fro fb cheecking OR 'uploads'
   //making cUrl request to FB
   $curlForFacebook = curl_init();
   curl_setopt_array($curlForFacebook, array(
