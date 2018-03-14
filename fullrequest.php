@@ -7,11 +7,9 @@
  header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');*/
 
  /*Start read array for hashing*/
-function HashRequest($data) //return array
+function HashRequest($data, $amount, $time) //return array
 {
  $temp_array = array();
- $currency = '';
- $timestamp;
  $value_balance;
  $temp_array['email']   = hash('sha256', $data->email);
  $temp_array['phone']   = hash('sha256', $data->phone);
@@ -25,15 +23,18 @@ function HashRequest($data) //return array
  $temp_array['zip']     = hash('sha256', $data->postCode);
  $temp_array['country'] = hash('sha256', $data->country); //must be two-letter code in DB number??
 
- //Parsing date birthday
- /*$date = explode('-', $data->birthday);
- $year =  $date[0];
- $month = $date[1];
- $day = substr($date[2],0,2);
-
- $temp_array['doby'] = hash('sha256',$year);
- $temp_array['dobm'] = hash('sha256',$month);
- $temp_array['dobd'] = hash('sha256',$day);*/
+ //Parsing date birthday if it not NULL
+ if($data->birthday != NULL)
+ {
+  $date = explode('-', $data->birthday);
+  echo 'DATE = '.$data->birthday;
+  $year =  $date[0];
+  $month = $date[1];
+  $day = substr($date[2],0,2);
+  $temp_array['doby'] = hash('sha256',$year);
+  $temp_array['dobm'] = hash('sha256',$month);
+  $temp_array['dobd'] = hash('sha256',$day);
+ }
 
  //Detect gender and make one hashed letter
  if($data->gender == 'Male')
@@ -41,31 +42,12 @@ function HashRequest($data) //return array
  else //Female
    $temp_array['gen'] = hash('sha256', 'F');
 
- $new_data['match_keys'] = $temp_array;
- $last = count($new_data)-1; //getting last item of array for inception data (must be ZERO)
- //$new_data[$last]['value']      = $value_balance;
- //$new_data[$last]['currency']   = $currency; //adding keys to this item
- $new_data['event_name'] = 'Purchase'; //Type of transaction
- //$new_data[$last]['event_time'] = $timestamp; //Adding time of transaction
-/*				   'accountBalance',
-				   'country',
-				   'currency');*/
- /*if($key == 'currency') //We need pure uppercase currency, not hashed
- {
-  $currency = strtoupper($value);
- }
-  else if($key == 'regTime') 
-  {
-   $timestamp = date_timestamp_get(date_create($value));  // We need timestamp format
-  }
-  else if($key == 'accountBalance')
-  {
-   $value_balance = $value; //value = accountBalance ??
-  }
- }
-   }
-  }
- }*/
+ $new_data['match_keys']    = $temp_array; //Passing customer data
+ $new_data['value']         = $amount; // Amount passing by param in func
+ $new_data['currency']      = strtoupper($data->currency); //adding keys to this item
+ $new_data['event_name']    = 'Purchase'; //Type of transaction
+ $new_data['event_time']    = strtotime($time); //making timestamp $time - param in func
+ 
  return $new_data; //array
 }
 
@@ -96,7 +78,6 @@ function getResponse($module, $lastTimeReg, $filter)
   $url .= $filter;
  $url .= '&api_username='.$api_username;
  $url .= '&api_password='.$api_password;
- echo $url;
 //Init curl
  $ch = curl_init($url);
  curl_setopt($ch,CURLOPT_RETURNTRANSFER,true); //LEADS
@@ -107,7 +88,7 @@ function getResponse($module, $lastTimeReg, $filter)
  curl_setopt($ch,CURLOPT_HEADER, false);
  $exec = curl_exec($ch);
  $response = json_decode($exec);
- echo '<pre>' . var_export($response, true) . '</pre>';
+// echo '<pre>' . var_export($response, true) . '</pre>';
  return $response;
 }
 
@@ -138,15 +119,10 @@ function createCustomerFilter($depositResponse)
  else //Error in request
   return 'Error in depositResponse request';
 }
- /*creating API request to get data from BX8, hashing and put in logs files*/
- function makeFbConversion($customers)
+ /*creating FB CONVERSION*/
+ function makeFbConversion($hashData)
  {
-  $dataString = backToString($customers); //Response to string for log file
-  $dataArray = HashRequest($customers); //Hash response
-   //this data we should send to FB ---- $hashdata
-   // FaceBook Api connect
-   //Creating link for cUrl fb
-  $TOKEN = 'EAAKU6gI8oi8BANVupRfx4hCR5qinRAs91FSQXn2nY4r8ixC97UeBek6kcFoYBZATq2Jwj8cekrK32O4gMEH4ck01N2Lv9pZAENPIDxczFd9C02ozJ4yvLreZCXGQogZBudwigVC6gWFFia49SasQFQ6RY8eyp9pJ7PBPc4Llbt3Hp5srDh21U6qJ45GAtTcQw0XULOPp8AZDZD';
+  $TOKEN = 'EAAKU6gI8oi8BAIKaANLA8vqNZBkBZB84NXQPI4psnyqIZBsaf05mMEeZBZCuqu9x27QDcSLtyMHv3m8q2EBqmJof47ewuYzZCZCS0UwnIJ6geNND3Ifk21WcuoZAYv31YtQ0v8ZAILzCjvebckG5otK4NsO7gE1XxEVesbAZBEJJTLNETjrkNZAFEzD4jXR4Y2at253iVa5dwAJxQZDZD';
   $OFFLINE_CONV_ID   = '1971209353202465'; //parameter for this FB CONVERSION
   $facebook_link  = 'https://graph.facebook.com/v2.12/';
   $facebook_link .= $OFFLINE_CONV_ID;
@@ -154,7 +130,7 @@ function createCustomerFilter($depositResponse)
   $facebook_link .= '?access_token=';
   $facebook_link .= $TOKEN;
   $facebook_link .= '&data=';
-  $facebook_link .= $hashdata; // Our data(hashed)
+  $facebook_link .= $hashData; // Our data(hashed)
   $facebook_link .= '&upload_tag='; //Uploads tags
   $facebook_link .= 'daily'; //daily upload_tag for fb cheecking OR 'uploads'
   //making cUrl request to FB
@@ -188,17 +164,27 @@ function createCustomerFilter($depositResponse)
  curl_close($curlForFacebook); //close connection 
 }
 
- $yesterday = date('Y_m_d', strtotime("-1 days")); //Getting yesteday date for checking
+ $yesterday = date('Y_m_d', strtotime("-2 days")); //Getting yesteday date for checking
  $depositResponse = getResponse('CustomerDeposits', $yesterday, ''); //Getting response from LAST DATE by Deposites
- $filter = createCustomerFilter($depositResponse); //Creating filter for CustomerRequest
- $response = getResponse('Customer','',$filter);
- $dataForFb = array();
- //$response[0]->Response->customers[0] -- this data need to parse
- for($j = 0; $j<count($response); $j++)
+ if(!empty($depositResponse->deposits))
  {
-  echo '<pre>'.var_export(HashRequest($response[$j]->Response->customers[0])).'</pre>';
-  array_push ($dataForFb, HashRequest($response[$j]->Response->customers[0]));
+  echo '<span style="font-weight:bold;">Records count: '.count((array)$depositResponse->deposits).'</span><br/>';
+  $filter = createCustomerFilter($depositResponse); //Creating filter for CustomerRequest
+  $response = getResponse('Customer','',$filter); //Getting response from Customers with filter by ID
+  $dataForFb = array();
+  if(!empty($response))
+  {
+   for($j = 0; $j<count($response); $j++)
+   {
+    $amount = $depositResponse->deposits[$j]->amount; //Getting amout fro value
+    $time   = $depositResponse->deposits[$j]->confirmTime; //Getting time for event_time
+    $dataForFb[] = HashRequest($response[$j]->Response->customers[0], $amount, $time); //hashing record
+   }
+   echo '<pre>'.var_export(backToString($dataForFb)).'</pre>';
+  // makeFbConversion(backToString($dataForFb)); // Sendind data-string to FB
+  }
+  else  echo 'Customer response is empty';
  }
- echo '<pre>'.var_export(backToString($dataForFb)).'</pre>';
+ else echo 'Deposit response is empty';
 //takeData();
 ?>
