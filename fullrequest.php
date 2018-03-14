@@ -76,7 +76,7 @@ function getResponse($module, $lastTimeReg, $filter)
  $url .= '&api_password='.$api_password;
 //Init curl
  $ch = curl_init($url);
- curl_setopt($ch,CURLOPT_RETURNTRANSFER,true); //LEADS
+ curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
  curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,20);
  curl_setopt($ch,CURLOPT_TIMEOUT,30);
  curl_setopt($ch,CURLOPT_FOLLOWLOCATION, false);
@@ -114,6 +114,8 @@ function createCustomerFilter($depositResponse)
  else //Error in request
   return 'Error in depositResponse request';
 }
+
+
  /*creating FB CONVERSION*/
  function makeFbConversion($hashData)
  {
@@ -160,8 +162,10 @@ function createCustomerFilter($depositResponse)
  curl_close($curlForFacebook); //close connection 
 }
 
+
+
 //Scripts starts from here
- $yesterday = date('Y_m_d', strtotime("-2 days")); //Getting yesteday date for checking
+ $yesterday = date('Y_m_d', strtotime("-2 days")); //Getting yesterday date for checking
  $depositResponse = getResponse('CustomerDeposits', $yesterday, ''); //Getting response from LAST DATE by Deposites
  if(!empty($depositResponse->deposits))
  {
@@ -180,7 +184,8 @@ function createCustomerFilter($depositResponse)
    echo '<pre>'.var_export(backToString($dataForFb),true).'</pre>';
   // makeFbConversion(backToString($dataForFb)); // Sendind data-string to FB
   }
-  else  echo 'Customer response is empty';
+  else echo 'Customer response is empty';
  }
  else echo 'Deposit response is empty';
+
 ?>
