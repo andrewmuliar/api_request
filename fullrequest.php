@@ -88,7 +88,7 @@ function getResponse($module, $lastTimeReg, $filter)
  curl_setopt($ch,CURLOPT_HEADER, false);
  $exec = curl_exec($ch);
  $response = json_decode($exec);
-// echo '<pre>' . var_export($response, true) . '</pre>';
+ echo '<pre>' . var_export($response, true) . '</pre>';
  return $response;
 }
 
@@ -104,7 +104,7 @@ function createCustomerFilter($depositResponse)
   {
    foreach( $key as $next => $value) // getting all customerId
    {
-    if($next == 'customerId')
+    if($next == 'customerId') //Find customerId key
 	{
 	 //Creating request with few BATCH
      $filterString .= '&BATCH['.$i.'][MODULE]=Customer&BATCH['.$i.'][COMMAND]=View&BATCH['.$i.'][FILTER][id][]='.$value; 
@@ -180,7 +180,7 @@ function createCustomerFilter($depositResponse)
     $time   = $depositResponse->deposits[$j]->confirmTime; //Getting time for event_time
     $dataForFb[] = HashRequest($response[$j]->Response->customers[0], $amount, $time); //hashing record
    }
-   echo '<pre>'.var_export(backToString($dataForFb)).'</pre>';
+   echo '<pre>'.var_export(backToString($dataForFb),true).'</pre>';
   // makeFbConversion(backToString($dataForFb)); // Sendind data-string to FB
   }
   else  echo 'Customer response is empty';
