@@ -117,7 +117,7 @@ function createCustomerFilter($depositResponse)
  /*creating FB CONVERSION*/
  function makeFbConversion($hashData)
  {
-  $TOKEN = 'EAAKU6gI8oi8BAIKaANLA8vqNZBkBZB84NXQPI4psnyqIZBsaf05mMEeZBZCuqu9x27QDcSLtyMHv3m8q2EBqmJof47ewuYzZCZCS0UwnIJ6geNND3Ifk21WcuoZAYv31YtQ0v8ZAILzCjvebckG5otK4NsO7gE1XxEVesbAZBEJJTLNETjrkNZAFEzD4jXR4Y2at253iVa5dwAJxQZDZD';
+  $TOKEN = 'EAAKU6gI8oi8BAPZBNpWZATasqHYfIqqjf7jFMdkzk5ljiTQ4PZCheQ0GVQigaZATqftZAljUeENfpYJNOemnmhN4l31nd2UwDGyRpQeMzeoNCZB7rlq9o5ZBGwbJIcjkdXZBAG4SCFqo8MOqZAaLxKS3UMypwZAL0bZBCgYorwKA4HGJ0jUSNRyGTcRivbKjuTpuNm2EZBDZAkTzKOQZDZD';
   $OFFLINE_CONV_ID   = '1971209353202465'; //parameter for this FB CONVERSION
   $facebook_link  = 'https://graph.facebook.com/v2.12/';
   $facebook_link .= $OFFLINE_CONV_ID;
@@ -128,6 +128,7 @@ function createCustomerFilter($depositResponse)
   $facebook_link .= $hashData; // Our data(hashed)
   $facebook_link .= '&upload_tag='; //Uploads tags
   $facebook_link .= 'daily'; //daily upload_tag for fb cheecking OR 'uploads'
+
   //making cUrl request to FB
   $curlForFacebook = curl_init();
   curl_setopt_array($curlForFacebook, array(
