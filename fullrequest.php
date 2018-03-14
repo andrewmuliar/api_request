@@ -13,9 +13,6 @@ function HashRequest($data, $amount, $time) //return array
  $value_balance;
  $temp_array['email']   = hash('sha256', $data->email);
  $temp_array['phone']   = hash('sha256', $data->phone);
- $temp_array['doby']    = hash('sha256', $data->phone);
- $temp_array['dobm']    = hash('sha256', $data->phone);
- $temp_array['dobd']    = hash('sha256', $data->phone);
  $temp_array['ln']      = hash('sha256', $data->lastName);
  $temp_array['fn']      = hash('sha256', $data->firstName);
  $temp_array['ct']      = hash('sha256', $data->city);
@@ -27,7 +24,6 @@ function HashRequest($data, $amount, $time) //return array
  if($data->birthday != NULL)
  {
   $date = explode('-', $data->birthday);
-  echo 'DATE = '.$data->birthday;
   $year =  $date[0];
   $month = $date[1];
   $day = substr($date[2],0,2);
