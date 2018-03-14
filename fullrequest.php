@@ -84,7 +84,7 @@ function getResponse($module, $lastTimeReg, $filter)
  curl_setopt($ch,CURLOPT_HEADER, false);
  $exec = curl_exec($ch);
  $response = json_decode($exec);
- echo '<pre>' . var_export($response, true) . '</pre>';
+ echo '<pre>'.var_export($response, true).'</pre>';
  return $response;
 }
 
@@ -159,6 +159,7 @@ function createCustomerFilter($depositResponse)
  curl_close($curlForFacebook); //close connection 
 }
 
+//Scripts starts from here
  $yesterday = date('Y_m_d', strtotime("-2 days")); //Getting yesteday date for checking
  $depositResponse = getResponse('CustomerDeposits', $yesterday, ''); //Getting response from LAST DATE by Deposites
  if(!empty($depositResponse->deposits))
@@ -181,5 +182,4 @@ function createCustomerFilter($depositResponse)
   else  echo 'Customer response is empty';
  }
  else echo 'Deposit response is empty';
-//takeData();
 ?>
