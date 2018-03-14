@@ -7,6 +7,7 @@
  header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token , Authorization');*/
 
  /*Start read array for hashing*/
+
 function HashRequest($data, $amount, $time) //return array
 {
  $temp_array = array();
@@ -119,7 +120,15 @@ function createCustomerFilter($depositResponse)
  /*creating FB CONVERSION*/
  function makeFbConversion($hashData)
  {
-  $TOKEN = 'EAAKU6gI8oi8BAPZBNpWZATasqHYfIqqjf7jFMdkzk5ljiTQ4PZCheQ0GVQigaZATqftZAljUeENfpYJNOemnmhN4l31nd2UwDGyRpQeMzeoNCZB7rlq9o5ZBGwbJIcjkdXZBAG4SCFqo8MOqZAaLxKS3UMypwZAL0bZBCgYorwKA4HGJ0jUSNRyGTcRivbKjuTpuNm2EZBDZAkTzKOQZDZD';
+  // DATE OF EXPIRE 2 MONTHS 
+  /*
+  
+  LAST UPDATE 14.03 
+  
+  EXPIRED 12.05
+    
+  */
+  $TOKEN = 'EAAKU6gI8oi8BAB31KTx5woySTtaUcBDSBmCqr7glukzAP8MjAXnFT6OwG92ZAhLxaDT6Rbyorpge66Njp8XTLcnAok9R0ylJpL98ZA5ZA7tRyUQlBmJKi5drPwgeEuIUPw1N16OADezbfRsePj3cuKAumcfpfQZD';
   $OFFLINE_CONV_ID   = '1971209353202465'; //parameter for this FB CONVERSION
   $facebook_link  = 'https://graph.facebook.com/v2.12/';
   $facebook_link .= $OFFLINE_CONV_ID;
@@ -182,7 +191,7 @@ function createCustomerFilter($depositResponse)
     $dataForFb[] = HashRequest($response[$j]->Response->customers[0], $amount, $time); //hashing record
    }
    echo '<pre>'.var_export(backToString($dataForFb),true).'</pre>';
-  // makeFbConversion(backToString($dataForFb)); // Sendind data-string to FB
+   makeFbConversion(backToString($dataForFb)); // Sendind data-string to FB
   }
   else echo 'Customer response is empty';
  }
