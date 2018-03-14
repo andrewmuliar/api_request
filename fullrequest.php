@@ -95,7 +95,6 @@ function createCustomerFilter($depositResponse)
  {
   $filterString = '';
   $i = 0;
-  $bathc = "&BATCH['.$i.']";
   foreach($depositResponse->deposits as $key) //parse array
   {
    foreach( $key as $next => $value) // getting all customerId
@@ -172,7 +171,7 @@ function createCustomerFilter($depositResponse)
   {
    for($j = 0; $j<count($response); $j++)
    {
-    $amount = $depositResponse->deposits[$j]->amount; //Getting amout fro value
+    $amount = $depositResponse->deposits[$j]->amount; //Getting amount for value
     $time   = $depositResponse->deposits[$j]->confirmTime; //Getting time for event_time
     $dataForFb[] = HashRequest($response[$j]->Response->customers[0], $amount, $time); //hashing record
    }
